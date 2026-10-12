@@ -6,16 +6,21 @@
 <meta name="theme-color" content="#08080f">
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex, nofollow">
-<title>Pedro, quiero confirmar tres cosas · Agencia Automat</title>
+<title>Pedro, vamos a concretar tu propuesta · Agencia Automat</title>
 <style>
   /* ======================================================================
-     Formulario de Agencia Automat para Pedro Constant (Espectáculos La Fiesta).
+     Cuestionario adaptativo de Agencia Automat para Pedro Constant
+     (Espectáculos La Fiesta). Revisión 2 aprobada el 09/10/2026.
 
-     IDENTIDAD REAL DE AGENCIA AUTOMAT, tomada de https://agenciaautomat.com/
+     IDENTIDAD REAL DE AGENCIA AUTOMAT, la misma del formulario aprobado:
        · Colores: variables reales de su hoja de estilos (--void, --surface,
          --purple, --orange, --text, --muted...).
        · Tipografías: Space Grotesk (títulos) e Inter (texto), las suyas.
        · Logotipo: /brand/favicon.svg ORIGINAL, sin recrear ni reinterpretar.
+
+     Un solo enlace, una sola visita. Los grupos siguientes se calculan con
+     las respuestas anteriores. Al final no se ha enviado nada: se revisa
+     todo junto y se manda de una vez.
 
      Mobile-first: se responde de pie, desde el móvil.
      Sin dependencias externas, sin cookies, sin analítica.
@@ -34,6 +39,7 @@
     --purple-deep:#4c1d95;
     --orange:#ff7a00;
     --orange-soft:#ffb020;
+    --green:#6ee7b7;
     --line:rgba(230,230,236,.16);
     --line-strong:rgba(230,230,236,.28);
     --border-subtle:rgba(255,255,255,.08);
@@ -61,7 +67,7 @@
     background-repeat:no-repeat;
     background-attachment:fixed;
   }
-  h1,h2,p,fieldset,legend{margin:0}
+  h1,h2,h3,p,fieldset,legend{margin:0}
   fieldset{border:0;padding:0;min-width:0}
   button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   input,textarea{font:inherit;color:inherit}
@@ -84,19 +90,13 @@
        · object-fit: cover  -> encuadra en lugar de deformar;
        · object-position: left -> deja fuera lo que hay a la derecha.
      El nombre va aparte, como texto de verdad, en Space Grotesk (la tipografía
-     de marca) y con sus colores: «Agencia» en el color de texto y «Automat» con
-     el degradado violeta→naranja de la identidad.
-     Para ajustar el recorte basta con el ancho de .brand__isotipo. */
-
+     de marca) y con sus colores. */
   .brand{
     padding:38px 0 0;
     display:flex;align-items:center;gap:16px;
   }
   .brand__isotipo{
     height:64px;
-    /* El encuadre deja solo el búho: el archivo oficial trae, a su derecha, el
-       nombre escrito en vectores. Este es el único número que hay que tocar si
-       el recorte pidiera ajuste. */
     aspect-ratio:31 / 25;
     object-fit:cover;
     object-position:left center;
@@ -114,18 +114,57 @@
   }
 
   /* ---------- Titular ---------- */
-  .hero{padding:30px 0 34px}
+  .hero{padding:30px 0 22px}
   .hero h1{
     font-family:var(--font-display);font-weight:700;
     font-size:clamp(28px,7.4vw,40px);line-height:1.1;letter-spacing:-.03em;color:var(--text);
   }
   .hero p{margin-top:14px;color:var(--text-soft);font-size:16.5px;max-width:46ch}
 
+  /* ---------- Lo que ya me contó: plegado y opcional ----------
+     Nace cerrado. Si él quiere, lo abre y ve el resumen de la reunión. */
+  .panel{
+    margin:26px 0 0;background:var(--surface);border:1px solid var(--border-subtle);
+    border-radius:var(--r-lg);padding:0 20px;
+  }
+  .panel[open]{padding-bottom:18px}
+  .panel summary{
+    cursor:pointer;list-style:none;padding:17px 0;
+    font-family:var(--font-display);font-weight:600;font-size:16px;color:var(--text-soft);
+    display:flex;justify-content:space-between;gap:12px;align-items:center;
+  }
+  .panel summary::-webkit-details-marker{display:none}
+  .panel summary:hover{color:var(--text)}
+  .panel summary .mas{color:var(--orange);font-size:22px;line-height:1;transition:transform .2s var(--ease)}
+  .panel[open] summary .mas{transform:rotate(45deg)}
+  .panel__intro{font-size:14.5px;color:var(--muted);margin:-4px 0 14px}
+  .panel__lista{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px}
+  .panel__lista li{font-size:15px;color:var(--text-soft);line-height:1.5;padding-left:18px;position:relative}
+  .panel__lista li::before{
+    content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;
+    background:linear-gradient(120deg,var(--purple),var(--orange));
+  }
+
+  /* ---------- Avisos (recuperado / enviado) ---------- */
+  .aviso{
+    margin:0 0 16px;padding:13px 16px;border-radius:var(--r-md);font-size:14.6px;
+    background:rgba(124,58,237,.13);border:1px solid rgba(168,85,247,.4);color:var(--text-soft);
+    display:flex;gap:10px;align-items:flex-start;
+  }
+  .aviso[hidden]{display:none}
+  .aviso::before{content:"↺";color:var(--purple-light);font-size:17px;line-height:1.3;flex:none}
+  .aviso b{color:var(--text);font-weight:600}
+  .aviso__lista{margin:10px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+  .aviso__lista li{font-size:14px;color:var(--muted);line-height:1.45}
+  .aviso__lista b{color:var(--text-soft);font-weight:600}
+
   /* ---------- Preguntas ---------- */
   .q{
     padding:26px 22px;margin-bottom:14px;
     background:var(--surface);border:1px solid var(--border-subtle);border-radius:var(--r-lg);
+    scroll-margin-top:18px;
   }
+  .q--seguimiento{border-color:rgba(124,58,237,.34)}
   .q__num{
     font-family:var(--font-display);font-size:12px;font-weight:600;letter-spacing:.12em;
     color:var(--orange);text-transform:uppercase;
@@ -135,7 +174,23 @@
     font-size:19px;line-height:1.34;letter-spacing:-.015em;color:var(--text);
   }
   .q__note{margin-top:10px;font-size:14.5px;color:var(--muted)}
+  .q__note b{color:var(--text-soft);font-weight:600}
   .q__hint{margin-top:6px;font-size:14.5px;color:var(--muted)}
+  .q__ask{margin-top:15px;font-size:16.5px;font-weight:600;color:var(--text);font-family:var(--font-display);letter-spacing:-.01em}
+  .q__eco{
+    margin-top:12px;font-size:14.5px;color:var(--text-soft);
+    background:var(--void);border:1px solid var(--line);border-radius:var(--r-md);padding:10px 13px;
+  }
+  .q__eco[hidden]{display:none}
+  .q__eco b{color:var(--orange-soft);font-weight:600}
+  /* La conclusión deducida, a la vista y sin sellar: es lo que él tiene que
+     confirmar antes de que el cuestionario se cierre. */
+  .q__eco--claro{
+    border-color:rgba(168,85,247,.45);background:rgba(124,58,237,.10);
+    font-size:15.5px;
+  }
+  .q__eco--claro b{color:var(--text)}
+  .q__eco--claro em{display:block;margin-top:5px;font-style:normal;font-size:13.6px;color:var(--muted)}
 
   /* ---------- Opciones: grandes, para el pulgar ---------- */
   .opts{margin-top:18px;display:flex;flex-direction:column;gap:9px}
@@ -159,6 +214,7 @@
     background:var(--void);transform:scale(0);transition:transform .16s var(--ease);
   }
   .opt__label{font-size:16px;line-height:1.45;color:var(--text-soft)}
+  .opt__quote{display:block;margin-top:5px;font-size:13.6px;color:var(--muted);line-height:1.5}
   .opt input:checked+.opt__box{
     border-color:rgba(255,122,0,.55);
     background:linear-gradient(180deg,rgba(255,122,0,.10),rgba(124,58,237,.10));
@@ -183,11 +239,10 @@
   }
   .q__count[hidden]{display:none}
   .q__count::before{
-    content:"";width:7px;height:7px;border-radius:50%;background:var(--orange);
-    flex:none;
+    content:"";width:7px;height:7px;border-radius:50%;background:var(--orange);flex:none;
   }
 
-  /* ---------- «Otra opción» ---------- */
+  /* ---------- «Otra opción» y respuesta corta ---------- */
   .other{margin-top:10px}
   .other[hidden]{display:none}
   .other label{display:block;font-size:13px;font-weight:500;color:var(--muted);margin-bottom:7px}
@@ -207,8 +262,19 @@
   .q--invalid .q__error{display:block}
   .q--invalid{border-color:rgba(255,122,0,.4)}
 
-  /* ---------- Enviar ---------- */
-  .submit{padding:6px 0 40px}
+  /* ---------- Avance ----------
+     Las barras dicen dónde está, y lo dice también una etiqueta en la misma
+     línea: en un recorrido adaptativo lo que falta depende de lo que contesta,
+     así que se cuenta lo que tiene delante, no un total prometido. */
+  .pasos{display:flex;align-items:center;gap:10px;margin:0 0 16px}
+  .pasos__texto{
+    flex:none;margin:0;font-size:12.5px;color:var(--muted);letter-spacing:.02em;
+    white-space:nowrap;
+  }
+  .pasos__texto[hidden]{display:none}
+  .pasos__barra{display:flex;flex:1 1 auto;gap:6px;min-width:0}
+  .pasos__paso{height:4px;flex:1 1 0;border-radius:999px;background:rgba(230,230,236,.14);transition:background .3s var(--ease)}
+  .pasos__paso[data-hecho="1"]{background:linear-gradient(90deg,var(--purple),var(--orange))}
   .btn{
     display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
     min-height:54px;padding:0 22px;border-radius:var(--r-md);
@@ -217,38 +283,135 @@
     transition:transform .1s var(--ease),filter .16s var(--ease),background .16s var(--ease);
   }
   .btn:active{transform:translateY(1px)}
+  .btn[hidden]{display:none}
   .btn--primary{
     background-image:linear-gradient(100deg,var(--purple),var(--orange));
     color:#fff;
   }
   .btn--primary:hover{filter:brightness(1.12)}
   .btn--ghost{
-    background:var(--surface-raised);border-color:var(--line);color:var(--text);
-    font-weight:500;
+    background:var(--surface-raised);border-color:var(--line);color:var(--text);font-weight:500;
   }
   .btn--ghost:hover{background:#1b1b26;border-color:var(--line-strong)}
-  .privacy{margin-top:14px;font-size:13px;color:var(--muted);text-align:center}
+  .privacy{margin-top:12px;font-size:13px;color:var(--muted);text-align:center}
+  .privacy[hidden]{display:none}
 
-  /* ---------- Revisión y envío ---------- */
+  /* ---------- Navegación: atrás, continuar y empezar de nuevo ----------
+     Una sola barra, al final del cuestionario y pegada abajo, para que sus
+     controles estén siempre a la vista sin taparle la pregunta: avanzar, volver
+     atrás sin perder nada, y empezar de nuevo. En móvil los dos botones se
+     reparten el ancho; en ordenador se quedan a la derecha, sin estirarse.
+     La barra va pegada, así que la página reserva debajo el mismo alto: sin ese
+     hueco, al llegar al final taparía los botones de envío y el «Empezar de
+     nuevo», que quedarían debajo sin poder pulsarse. */
+  .nav{
+    position:sticky;bottom:0;z-index:6;
+    margin:0 -20px;padding:12px 20px 12px;
+    background:rgba(8,8,15,.94);border-top:1px solid var(--line);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  }
+  /* El hueco que reserva la barra lo mide el propio motor (ajustarHuecoNav) y lo
+     deja puesto aquí: ni un píxel de menos (la barra taparía el final del
+     cuestionario) ni de más (quedaría un vacío raro al llegar abajo). */
+  .nav__acciones{display:flex;gap:10px}
+  .nav__acciones .btn{flex:1 1 0;min-width:0}
+  .nav__atras{flex:0 0 auto!important;width:auto!important}
+  .nav .btn[hidden]{display:none}
+
+  /* ---------- Empezar de nuevo ----------
+     Junto a los controles de navegación, dentro de la misma barra, como CONTROL
+     SECUNDARIO de verdad: tiene forma de botón, un icono que dice lo que hace y
+     área de sobra para el dedo. Pero no compite con «Continuar»: es más bajo, va
+     sin relleno, con el borde y el texto apagados, y con el nombre en gris. Lo
+     que se pulsa sin querer es lo que se ve; esto se encuentra cuando se busca.
+     Antes de borrar nada pide confirmación, en la misma línea, sin ventanas. */
+  .reiniciar{
+    display:flex;justify-content:center;flex-wrap:wrap;gap:8px;
+    margin:2px 0 0;padding-top:10px;border-top:1px solid var(--border-subtle);
+  }
+  .reiniciar[hidden]{display:none}
+  .reiniciar__link{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    min-height:44px;padding:0 16px;border-radius:var(--r-sm);
+    font-family:var(--font-body);font-size:14.5px;font-weight:500;
+    color:var(--text-soft);
+    background:transparent;border:1px solid var(--line);
+  }
+  .reiniciar__link svg{width:17px;height:17px;flex:none;color:var(--muted)}
+  .reiniciar__link:hover{
+    color:var(--text);border-color:var(--line-strong);background:var(--surface-raised);
+  }
+  .reiniciar__link:hover svg{color:var(--text-soft)}
+  .reiniciar__conf{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+  .reiniciar__conf[hidden]{display:none}
+  .reiniciar__preg{font-size:13.5px;color:var(--text-soft);width:100%;text-align:center}
+  .reiniciar__btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-height:44px;padding:0 15px;border-radius:var(--r-sm);
+    font-family:var(--font-body);font-size:14px;font-weight:500;
+    background:transparent;border:1px solid var(--line);color:var(--text-soft);
+  }
+  .reiniciar__btn--si{color:var(--orange-soft);border-color:rgba(255,176,32,.45)}
+  .reiniciar__btn:hover{border-color:var(--line-strong);color:var(--text);background:var(--surface-raised)}
+
+  /* ---------- Revisión ----------
+     El mismo panel sirve para dos cosas distintas, y lo dice `data-final`:
+       · con algo pendiente, NO es un cierre: enseña lo que llevas y por dónde
+         seguir, sin «Gracias» y sin dar nada por terminado;
+       · sin nada pendiente, es el cierre: el «Gracias» y el envío. */
   .result{
     display:none;padding:26px 22px;margin-bottom:16px;
     background:var(--surface);border:1px solid var(--border-subtle);border-radius:var(--r-lg);
   }
   .result[data-open="true"]{display:block}
   .result h2{
-    font-family:var(--font-display);font-weight:700;font-size:22px;
-    letter-spacing:-.02em;
+    font-family:var(--font-display);font-weight:700;font-size:22px;letter-spacing:-.02em;
     background:linear-gradient(100deg,var(--purple-light),var(--orange));
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  .result p{margin-top:10px;font-size:15.5px;color:var(--text-soft)}
+  .result h2[hidden]{display:none}
+  .result>p{margin-top:10px;font-size:15.5px;color:var(--text-soft)}
+  .result>p[hidden]{display:none}
   .result__actions{margin-top:18px;display:flex;flex-direction:column;gap:9px}
-  .summary{
-    margin-top:16px;background:var(--void);border:1px solid var(--line);
-    border-radius:var(--r-md);padding:15px 16px;
-    font-size:14.5px;color:var(--text-soft);
-    white-space:pre-wrap;word-break:break-word;line-height:1.6;
+  .result__actions[hidden]{display:none}
+  /* El texto del cierre solo sale cuando de verdad no queda nada. */
+  .result[data-final="false"] .final-solo{display:none}
+
+  .bloque{margin-top:16px;background:var(--void);border:1px solid var(--line);border-radius:var(--r-md);padding:15px 16px}
+  .bloque h3{
+    font-family:var(--font-display);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 11px;
   }
+  .bloque--ok h3{color:var(--green)}
+  .bloque--ded h3{color:var(--purple-light)}
+  .bloque--pend h3{color:var(--orange-soft)}
+  .bloque__nota{margin:0 0 12px;font-size:13.6px;color:var(--muted);line-height:1.5}
+  .bloque ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px}
+  .bloque li{font-size:15px;color:var(--text-soft);line-height:1.5}
+  .bloque li em{display:block;font-style:normal;font-size:13.5px;color:var(--muted);margin-top:3px}
+  .bloque li b{font-weight:600;color:var(--text)}
+  .bloque li.bloque__ded{border-left:2px solid rgba(168,85,247,.5);padding-left:12px}
+  .bloque li.bloque__ded b{color:var(--purple-light)}
+  .bloque__vacio{font-size:14.6px;color:var(--muted)}
+  /* El estado del cuestionario, dicho tal cual: completado solo si no queda
+     nada material por resolver. Habla del cuestionario, no del proyecto. */
+  .estado-briefing{
+    margin-top:16px;padding:12px 14px;border-radius:var(--r-md);font-size:14.2px;line-height:1.5;
+    background:rgba(255,122,0,.1);border:1px solid rgba(255,176,32,.36);color:var(--text-soft);
+  }
+  .estado-briefing[data-cerrado="1"]{
+    background:rgba(110,231,183,.1);border-color:rgba(110,231,183,.36);
+  }
+  /* Cuando el resumen enseña lo que hay, pero todavía falta algo por resolver:
+     se dice con claridad y sin ofrecer ningún envío. */
+  .pendiente-aviso{
+    margin-top:14px;padding:12px 14px;border-radius:var(--r-md);font-size:14.2px;line-height:1.5;
+    background:rgba(124,58,237,.14);border:1px solid rgba(168,85,247,.42);color:var(--text-soft);
+  }
+  .pendiente-aviso[hidden]{display:none}
+  /* El botón para seguir con lo que falta: es la salida del panel cuando aún no
+     es el cierre. Se queda pegado a la tarjeta pendiente, que es lo que resuelve. */
+  .result__seguir{margin-top:14px}
+  .result__seguir[hidden]{display:none}
 
   .toast{
     position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);
@@ -277,7 +440,7 @@
     .brand{padding-top:46px;gap:20px}
     .brand__isotipo{height:78px}
     .brand__name{font-size:34px}
-    .hero{padding:34px 0 40px}
+    .hero{padding:34px 0 26px}
     .hero p{font-size:17.5px;max-width:52ch}
 
     .q{padding:34px 38px;margin-bottom:18px}
@@ -294,13 +457,23 @@
 
     .result{padding:34px 38px}
     .result__actions{flex-direction:row;flex-wrap:wrap}
-    .result__actions .btn{width:auto;flex:1 1 220px}
-    .summary{font-size:15px}
+    .result__actions .btn{width:auto;flex:1 1 200px}
+
+    /* La barra de navegación no se estira con el texto: los botones se quedan
+       juntos, a la derecha, y el de atrás con su ancho natural. El control
+       secundario se queda a la izquierda, con su ancho justo. */
+    .nav__acciones{justify-content:flex-end}
+    .nav__acciones .btn{flex:0 1 auto;width:auto;min-width:190px}
+    .nav__atras{min-width:0!important}
+    .nav__seguir{order:2}
+    .nav__atras{order:1}
+    .reiniciar{justify-content:flex-start}
+    .reiniciar__link{width:auto}
 
     footer{padding-bottom:56px}
   }
 
-  /* Pantallas muy anchas: el formulario respira, pero no se estira sin fin. */
+  /* Pantallas muy anchas: el cuestionario respira, pero no se estira sin fin. */
   @media (min-width:1200px){
     .wrap{max-width:920px}
   }
@@ -330,144 +503,98 @@
 </header>
 
 <div class="wrap hero">
-  <h1>Pedro, quiero confirmar tres cosas</h1>
-  <p>He revisado lo que hablamos y estas respuestas me ayudarán a preparar una propuesta adaptada a tu empresa.</p>
+  <h1>Pedro, vamos a concretar tu propuesta.</h1>
+  <p>He revisado todo lo que hablamos sobre la gestión de tus cuatro empresas, los presupuestos y las tareas que te quitan tiempo. Quiero concretar algunos detalles para prepararte una demostración adaptada a tu negocio.</p>
+
+  <!-- Lo principal que ya me contó, plegado y opcional: se abre solo si él
+       quiere. Los doce hechos completos de la reunión se quedan por dentro,
+       como documentación del proyecto: ya no viajan en el mensaje. -->
+  <details class="panel" id="panel-conocido">
+    <summary>Lo que ya me contaste <span class="mas" aria-hidden="true">+</span></summary>
+    <p class="panel__intro">Esto ya lo tengo apuntado de la reunión, así que no te lo vuelvo a preguntar.</p>
+    <ul class="panel__lista" id="lista-conocido"></ul>
+  </details>
 </div>
 
 <main class="wrap">
+  <p class="aviso" id="aviso-recuperado" hidden></p>
+
   <form id="form" novalidate>
-
-    <!-- ===================== 1 ===================== -->
-    <section class="q" id="q1-wrap">
-      <p class="q__num" id="q1-num">Pregunta 1 de 3</p>
-      <h2 class="q__title" id="q1-label">De las tareas que más tiempo te quitan, ¿cuál te gustaría ver funcionando en la primera versión?</h2>
-      <p class="q__note">Elige la tarea que te gustaría mejorar primero.</p>
-
-      <fieldset class="opts" aria-labelledby="q1-label">
-        <legend class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Pregunta 1</legend>
-
-        <label class="opt"><input type="radio" name="q1" value="Preparar presupuestos">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Preparar presupuestos</span></span></label>
-
-        <label class="opt"><input type="radio" name="q1" value="Hojas de ruta y logística de montaje">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Hojas de ruta y logística de montaje</span></span></label>
-
-        <label class="opt"><input type="radio" name="q1" value="Documentación de ayuntamientos y proveedores">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Documentación de ayuntamientos y proveedores</span></span></label>
-
-        <label class="opt"><input type="radio" name="q1" value="Carteles para redes">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Carteles para redes</span></span></label>
-
-        <label class="opt"><input type="radio" name="q1" value="Campañas de correo a ayuntamientos">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Campañas de correo a ayuntamientos</span></span></label>
-
-        <label class="opt opt--soft"><input type="radio" name="q1" value="Aún no lo sé" data-exclusive-soft="1">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Aún no lo sé</span></span></label>
-
-        <label class="opt opt--soft"><input type="radio" name="q1" value="__otra__" data-other="1">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Otra opción</span></span></label>
-      </fieldset>
-
-      <div class="other" id="q1-other" hidden>
-        <label for="q1-other-input">¿Cuál?</label>
-        <input id="q1-other-input" type="text" name="q1_otra" placeholder="Escríbelo con tus palabras" autocomplete="off" enterkeyhint="done">
-      </div>
-
-      <p class="q__error" id="q1-error" role="alert">Marca una opción para poder seguir. Si no lo tienes claro, «Aún no lo sé» me sirve.</p>
-    </section>
-
-    <!-- ===================== 2 ===================== -->
-    <section class="q" id="q2-wrap">
-      <p class="q__num" id="q2-num">Pregunta 2 de 3</p>
-      <h2 class="q__title" id="q2-label">En un mes de mucha actividad, ¿cuántas horas le dedica aproximadamente el equipo a esa tarea?</h2>
-      <p class="q__note">Pienso en tu mes punta, no en un mes tranquilo. Es un cálculo a ojo y me sirve igual.</p>
-
-      <fieldset class="opts" aria-labelledby="q2-label">
-        <legend class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Pregunta 2</legend>
-
-        <label class="opt"><input type="radio" name="q2" value="Menos de 10 horas">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Menos de 10 horas</span></span></label>
-
-        <label class="opt"><input type="radio" name="q2" value="Entre 10 y 20 horas">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Entre 10 y 20 horas</span></span></label>
-
-        <label class="opt"><input type="radio" name="q2" value="Entre 21 y 40 horas">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Entre 21 y 40 horas</span></span></label>
-
-        <label class="opt"><input type="radio" name="q2" value="Más de 40 horas">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Más de 40 horas</span></span></label>
-
-        <label class="opt opt--soft"><input type="radio" name="q2" value="Aún no lo sé" data-exclusive-soft="1">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Aún no lo sé</span></span></label>
-
-        <label class="opt opt--soft"><input type="radio" name="q2" value="__otra__" data-other="1">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Otra opción</span></span></label>
-      </fieldset>
-
-      <div class="other" id="q2-other" hidden>
-        <label for="q2-other-input">Si te resulta más fácil, dímelo a tu manera</label>
-        <input id="q2-other-input" type="text" name="q2_otra" placeholder="Por ejemplo: unas 6 horas a la semana" autocomplete="off" enterkeyhint="done">
-      </div>
-
-      <p class="q__error" id="q2-error" role="alert">Marca una opción para poder seguir. Si no lo tienes claro, «Aún no lo sé» me sirve.</p>
-    </section>
-
-    <!-- ===================== 3 ===================== -->
-    <section class="q" id="q3-wrap">
-      <p class="q__num" id="q3-num">Pregunta 3 de 3</p>
-      <h2 class="q__title" id="q3-label">Cuando un cliente te pide una fecha, ¿cómo compruebas hoy que tienes libres al artista, el equipo y el material que le vas a ofrecer?</h2>
-      <p class="q__note">No hablo de buscar un contrato o un papel guardado, sino de saber si algo está libre ese día.</p>
-      <p class="q__hint">Puedes marcar varias: si usas más de una, márcalas todas.</p>
-
-      <fieldset class="opts" aria-labelledby="q3-label" data-multi="1">
-        <legend class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Pregunta 3</legend>
-
-        <label class="opt"><input type="checkbox" name="q3" value="El programa me deja verlo ya entre las cuatro empresas a la vez">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">El programa me deja verlo ya entre las cuatro empresas a la vez</span></span></label>
-
-        <label class="opt"><input type="checkbox" name="q3" value="Miro en el programa, pero empresa por empresa">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Miro en el programa, pero empresa por empresa</span></span></label>
-
-        <label class="opt"><input type="checkbox" name="q3" value="Pregunto por teléfono o WhatsApp a quien lleva ese artista o ese material">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Pregunto por teléfono o WhatsApp a quien lleva ese artista o ese material</span></span></label>
-
-        <label class="opt"><input type="checkbox" name="q3" value="Lo tengo en la cabeza, en mi agenda o en un papel">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Lo tengo en la cabeza, en mi agenda o en un papel</span></span></label>
-
-        <label class="opt"><input type="checkbox" name="q3" value="Pregunto a la nave o a quien lleva el almacén">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Pregunto a la nave o a quien lleva el almacén</span></span></label>
-
-        <label class="opt opt--soft"><input type="checkbox" name="q3" value="Aún no lo sé" data-exclusive-soft="1">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Aún no lo sé</span></span></label>
-
-        <label class="opt opt--soft"><input type="checkbox" name="q3" value="__otra__" data-other="1">
-          <span class="opt__box"><span class="opt__tick" aria-hidden="true"></span><span class="opt__label">Otra opción</span></span></label>
-      </fieldset>
-
-      <div class="other" id="q3-other" hidden>
-        <label for="q3-other-input">¿Cómo lo haces?</label>
-        <input id="q3-other-input" type="text" name="q3_otra" placeholder="Escríbelo con tus palabras" autocomplete="off" enterkeyhint="done">
-      </div>
-
-      <p class="q__count" id="q3-count" aria-live="polite" hidden></p>
-
-      <p class="q__error" id="q3-error" role="alert">Marca al menos una opción para poder seguir. Si no lo tienes claro, «Aún no lo sé» me sirve.</p>
-    </section>
+    <div class="pasos" id="pasos" aria-hidden="true">
+      <p class="pasos__texto" id="pasos-texto"></p>
+    </div>
+    <div id="preguntas"></div>
 
     <!-- ===================== Revisión y envío ===================== -->
-    <section class="result" id="result" aria-live="polite">
-      <h2>Gracias, Pedro</h2>
-      <p>Revisa que sea lo que querías decir. Cuando esté bien, mándamelo con el botón que prefieras: se abre tu WhatsApp o tu correo con las respuestas ya escritas.</p>
-      <div class="result__actions">
+    <!-- Mientras quede algo por resolver, este panel NO es el cierre: se dice lo
+         que falta y se sigue por ahí. El «Gracias» y el mensaje final solo salen
+         cuando no queda nada material, y eso se marca con data-final. -->
+    <section class="result" id="result" data-final="false" aria-live="polite">
+      <h2 id="rev-gracias" class="final-solo" hidden>Gracias, Pedro</h2>
+      <p id="rev-intro" class="final-solo" hidden>Esto es lo que me va a llegar. Cuando esté bien, mándamelo con el botón que prefieras: se abre tu WhatsApp o tu correo con todo ya escrito.</p>
+      <h2 id="rev-titulo-pendiente" hidden>Tu cuestionario, hasta ahora</h2>
+      <p id="rev-texto-pendiente" hidden>Aquí tienes lo que llevas. Todavía queda algo por resolver, y lo tienes justo aquí abajo: se hace de una vez.</p>
+
+      <div class="bloque bloque--ok">
+        <h3>Confirmado por ti</h3>
+        <p class="bloque__nota">Lo que has contestado tú, tal cual. Esto es un dato.</p>
+        <ul id="rev-confirmado"></ul>
+      </div>
+
+      <div class="bloque bloque--ded">
+        <h3>Deducido por mí · por confirmar</h3>
+        <p class="bloque__nota">No me lo has dicho tú: lo he deducido de tus respuestas. No lo doy por bueno hasta que me digas que sí.</p>
+        <ul id="rev-deducido"></ul>
+        <p class="bloque__vacio" id="rev-deducido-vacio">Nada deducido: todo lo de arriba lo has dicho tú.</p>
+      </div>
+
+      <div class="bloque bloque--pend">
+        <h3>Pendiente · aún no lo sabes</h3>
+        <ul id="rev-pendiente"></ul>
+        <p class="bloque__vacio" id="rev-pendiente-vacio">Nada pendiente: me lo has contestado todo.</p>
+      </div>
+
+      <p class="estado-briefing" id="rev-estado" role="status"></p>
+
+      <!-- Si todavía queda algo por resolver, aquí se dice, y el botón de enviar
+           no se enseña hasta que esté cerrado de verdad. -->
+      <p class="pendiente-aviso" id="rev-pendiente-aviso" role="status" hidden></p>
+
+      <!-- Y desde aquí se sigue directamente con lo que falta, sin volver a
+           buscarlo: lleva justo a la tarjeta pendiente. -->
+      <button type="button" class="btn btn--primary result__seguir" id="rev-seguir" hidden>Continuar con lo que falta</button>
+
+      <div class="result__actions" id="acciones-envio">
         <button type="button" class="btn btn--primary" id="send-wa">Enviar por WhatsApp</button>
         <button type="button" class="btn btn--ghost" id="send-mail">Enviar por correo</button>
         <button type="button" class="btn btn--ghost" id="copy">Copiar las respuestas</button>
       </div>
-      <div class="summary" id="summary"></div>
     </section>
 
-    <div class="submit">
-      <button type="submit" class="btn btn--primary" id="send">Revisar mis respuestas</button>
+    <!-- Navegación y cierre. Va pegado abajo, a la vista en todo momento: para
+         avanzar, para volver atrás sin perder nada y para empezar de nuevo, que
+         vive aquí al lado, discreto pero a la vista. Los botones que se ven en
+         cada momento los decide un único sitio (visibilidadBotones). -->
+    <div class="nav" id="nav">
+      <div class="nav__acciones">
+        <button type="button" class="btn btn--ghost nav__atras" id="volver" hidden>&larr; Atrás</button>
+        <button type="submit" class="btn btn--primary nav__seguir" id="send">Continuar</button>
+      </div>
+
+      <!-- Empezar de nuevo: control secundario, junto a los controles y discreto,
+           con confirmación en la propia línea antes de borrar nada. -->
+      <div class="reiniciar" id="reiniciar" hidden>
+        <button type="button" class="reiniciar__link" id="reiniciar-abrir">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+          Empezar de nuevo
+        </button>
+        <span class="reiniciar__conf" id="reiniciar-conf" hidden>
+          <span class="reiniciar__preg" id="reiniciar-preg"></span>
+          <button type="button" class="reiniciar__btn reiniciar__btn--si" id="reiniciar-si">Sí, bórralas</button>
+          <button type="button" class="reiniciar__btn" id="reiniciar-no">No, seguir</button>
+        </span>
+      </div>
+
       <p class="privacy">Uso tus respuestas solo para preparar tu propuesta. No las comparto con nadie más.</p>
     </div>
 
@@ -477,7 +604,7 @@
 <footer class="wrap">
   <div class="foot">
     <span>Agencia Automat · <a href="https://agenciaautomat.com/" target="_blank" rel="noopener">agenciaautomat.com</a></span>
-    <span class="saved" id="saved" hidden>Respuestas guardadas en este dispositivo</span>
+    <span class="saved" id="saved" hidden>Lo que llevas respondido queda guardado en este dispositivo</span>
   </div>
 </footer>
 
@@ -491,7 +618,7 @@
              Ejemplo España: "34600123456". Si se deja vacío, el botón de
              WhatsApp no aparece y quedan el correo y el copiar.
    EMAIL:    buzón de la agencia. Si se deja vacío, tampoco aparece.
-   FIRMA:    cómo firma el mensaje que le llega a Pedro.
+   FIRMA:    cómo firma el mensaje que me llega.
    ====================================================================== */
 var CONFIG = {
   WHATSAPP: "34656839568",
@@ -502,39 +629,1844 @@ var CONFIG = {
 (function () {
   "use strict";
 
-  var form = document.getElementById("form");
-  var result = document.getElementById("result");
-  var summary = document.getElementById("summary");
-  var toast = document.getElementById("toast");
-  var saved = document.getElementById("saved");
-  var STORAGE_KEY = "automat-espectaculos-lafiesta-3-preguntas";
-  var STORAGE_VERSION = 2;
+  /* ====================================================================
+     1. CONSTANTES DEL CUESTIONARIO
+     ==================================================================== */
 
-  var QUESTIONS = [
-    { id: 1, name: "q1", title: "De las tareas que más tiempo te quitan, ¿cuál te gustaría ver funcionando en la primera versión?" },
-    { id: 2, name: "q2", title: "En un mes de mucha actividad, ¿cuántas horas le dedica aproximadamente el equipo a esa tarea?" },
-    { id: 3, name: "q3", title: "Cuando un cliente te pide una fecha, ¿cómo compruebas hoy que tienes libres al artista, el equipo y el material?" }
+  var STORAGE_KEY = "automat-espectaculos-lafiesta-adaptativo";
+  var STORAGE_VERSION = 1;
+
+  /* Cuántas preguntas se le enseñan en una pantalla. Nunca se enseña una pregunta
+     futura: cada pantalla se calcula con lo respondido en las anteriores. */
+  var TAMANO_PANTALLA = 3;
+
+  /* El recorrido se navega POR PANTALLAS: cada pantalla es lo que se le enseña de
+     una vez. `ANTES` es el sitio desde el que se ve la primera (a la que siempre
+     puede volver) y `RESUMEN` es el resumen final, que no es una pantalla. */
+  var ANTES = -1;
+  var RESUMEN = -2;
+
+  var NO_SE = "Aún no lo sé";
+  var OTRA = "__otra__";
+
+  /* Nombre corto de la incógnita que no se conserva como respuesta: cuando él
+     no sabe decir su criterio de éxito, la incógnita es suya igual y hay que
+     poder nombrarla en el mensaje sin depender de que la tarjeta esté guardada. */
+  var M_CORTO_EXITO = "G. Qué te haría decir que funciona";
+
+  /* Las tres salidas de la tarjeta que confirma una conclusión mía. */
+  var SI_ESO = "Sí, es justo eso";
+  var NO_CORREGIR = "No, lo corrijo yo";
+
+  /* Textos exactos de las opciones de la pregunta 3. Se usan como constantes
+     para que las condiciones de aparición no dependan de copiar bien una
+     cadena larga. */
+  var OP = {
+    PROGRAMA_YA: "El programa me deja verlo ya entre las cuatro empresas a la vez",
+    EMPRESA_POR_EMPRESA: "Miro en el programa, pero empresa por empresa",
+    TELEFONO: "Pregunto por teléfono o WhatsApp a quien lleva ese artista o ese material",
+    CABEZA: "Lo tengo en la cabeza, en mi agenda o en un papel",
+    NAVE: "Pregunto a la nave o a quien lleva el almacén"
+  };
+
+  /* Las cuatro formas de comprobar la disponibilidad «a mano». Si marca
+     cualquiera de ellas, el problema de disponibilidad existe y se
+     profundiza; si marca solo que el programa ya se lo muestra, no hay nada
+     que construir ahí y no se le pregunta más por esto. */
+  var A_MANO = [OP.EMPRESA_POR_EMPRESA, OP.TELEFONO, OP.NAVE, OP.CABEZA];
+
+  var TAREAS = {
+    PRESUPUESTOS: "Preparar presupuestos",
+    RUTAS: "Hojas de ruta y logística de montaje",
+    DOCUMENTACION: "Documentación de ayuntamientos y proveedores",
+    CARTELES: "Carteles para redes",
+    CAMPANAS: "Campañas de correo a ayuntamientos"
+  };
+
+  var NADA_MAS = "Nada: mirando empresa por empresa me apaño";
+
+  /* ====================================================================
+     2. LO QUE YA SÉ DE LA REUNIÓN (documentación del proyecto)
+     Lo confirmado con la voz de Pedro en la transcripción del 24/09/2026.
+     Cada hecho puede llevar una versión `breve`: los que la llevan son los
+     principales y son los únicos que se le enseñan, plegados, para que vea
+     que me acuerdo de la reunión.
+
+     El hecho completo (texto) NO se le muestra y TAMPOCO VIAJA YA en el
+     mensaje de envío: el mensaje lleva solo el cuestionario (identificación,
+     respuestas nuevas, lo que él ha confirmado, sus incógnitas y el estado).
+     La reproducción entera de la reunión se queda aquí, como documentación
+     del proyecto, y no se le manda por WhatsApp ni por correo.
+     ==================================================================== */
+  var CONOCIDO = [
+    { texto: "<b>Vendes paquetes de fiesta a ayuntamientos y festeros:</b> orquesta, discomóvil, humorista, mentalista, sillas y mesas, escenario, carpa, pantallas LED y truss.",
+      breve: "Vendes paquetes de fiesta a ayuntamientos y festeros." },
+    { texto: "<b>Tienes cuatro empresas estancas que comparten el stock.</b> Cuando no sabes en cuál está algo, te toca pasear las cuatro hasta que aparece.",
+      breve: "Tienes cuatro empresas estancas que comparten el stock." },
+    { texto: "<b>La búsqueda global de contratos la propusiste tú:</b> que una búsqueda consulte las cuatro empresas a la vez, con el mismo encabezamiento." },
+    { texto: "<b>El programa actual te parece «una maravilla»</b> y quieres seguir con él salvo que la alternativa sea claramente mejor.",
+      breve: "El programa actual te parece «una maravilla» y quieres seguir con él." },
+    { texto: "<b>Un centenar de clientes al mes</b>, «seguro», con estacionalidad muy marcada: verano saturado, abril y mayo el 80 % de las fallas, Navidad entre el 70 % y el 90 % ya contratado.",
+      breve: "Un centenar de clientes al mes, con verano, fallas y Navidad a tope." },
+    { texto: "<b>La oficina es Tere</b> (contabilidad), <b>Greta</b> (reuniones y carteles), <b>Rosa</b> (altas de trabajadores y documentación de ayuntamientos) <b>y Alex</b> (comercial y subvenciones).",
+      breve: "En la oficina están Tere, Greta, Rosa y Alex." },
+    { texto: "<b>Los carteles son para redes:</b> «los de imprimir son tres de cada 100 o menos»." },
+    { texto: "<b>La lista de concejales de cultura</b> costó muchas horas de secretaría llamando, filtrada por población." },
+    { texto: "<b>Una semana antes del evento</b> se hace el chequeo completo del contrato y de todos los proveedores, junto con la hoja de ruta." },
+    { texto: "<b>La documentación municipal se ha puesto exigente:</b> homologación del escenario, de la carpa y de las telas; papeles del truss, del cuadro eléctrico y del camión escenario con dimensiones y peso." },
+    { texto: "<b>A los ayuntamientos se les factura por FACe</b> y a los proveedores se les paga a un mes. La firma del cliente es online." },
+    { texto: "<b>Tu criterio de éxito:</b> «ir ganando competitividad con el mismo personal, más tiempo, más todo para poder hacer más cosas»." }
   ];
 
-  /* ---------- Isotipo: el original, encuadrado con CSS. Si el archivo local no
-       está, se carga el de la web; y si tampoco, queda el nombre, que ya es
-       texto de verdad y no depende de ninguna imagen. ---------- */
-  (function logo() {
-    var img = document.getElementById("logo");
-    if (!img) return;
-    img.addEventListener("error", function () {
-      var remoto = img.getAttribute("data-remoto");
-      var src = img.getAttribute("src") || "";
-      if (remoto && src !== remoto) {
-        img.setAttribute("src", remoto);
-        return;
-      }
-      img.style.display = "none";
-    });
-    /* Si la imagen carga sin problema, no hay nada que hacer: el nombre es texto
-       aparte y siempre está visible. */
-  })();
+  /* ====================================================================
+     3. LO QUE NO SE LE PREGUNTA, Y POR QUÉ (documentación del proyecto)
+     Decisión interna: son cosas que no dependen de él o que no cambian el
+     producto. No se le muestran y TAMPOCO VIAJAN YA en el mensaje de envío:
+     se quedan aquí, como documentación del proyecto. El «Lo que no te
+     pregunto» no necesita ir por WhatsApp.
+     ==================================================================== */
+  var NO_PREGUNTO = [
+    { texto: "<b>Límites y exclusiones:</b> no te pregunto por lo que no quieres. Solo anoto lo que excluyas tú expresamente; el resto lo reviso yo." },
+    { texto: "<b>El nombre y la frase que define la aplicación:</b> es una propuesta mía para tu visto bueno, no una decisión tuya." },
+    { texto: "<b>Señal, cobros, cancelaciones y cambios de fecha:</b> quedan fuera de esta primera versión. Aplazados y documentados, no bloquean nada." },
+    { texto: "<b>Quién puede cambiar un compromiso y cómo se conecta con tu programa actual:</b> es una incógnita técnica y la resuelvo yo con tu informático." },
+    { texto: "<b>El tratamiento de los DNI de tus clientes:</b> no es una decisión tuya, la fija tu asesor. Te lo contaré como parte del sistema nuevo." }
+  ];
 
+  /* ====================================================================
+     4. LAS RAMAS DE LA TAREA ELEGIDA (tarjeta E)
+     Una sola tarjeta: la de su rama. Las opciones están construidas con lo
+     que Pedro ya contó en la reunión; por eso algunas llevan su frase
+     debajo, entre comillas.
+     ==================================================================== */
+  var RAMAS = {};
+  RAMAS[TAREAS.PRESUPUESTOS] = {
+    titulo: "¿Qué es lo que más te cuesta hoy al preparar un presupuesto?",
+    opciones: [
+      { v: "Comprobar que tengo libres al artista y el material antes de ofrecerlo", ayuda: "«le pregunta, lo chequea, está libre, lo pone en la línea»" },
+      { v: "Ir cogiendo las líneas y armar el paquete completo" },
+      { v: "Pasarlo a contrato y enviárselo luego a cada proveedor" },
+      { v: "Que el precio salga bien con lo que me cuesta cada cosa" },
+      { v: "Repetir el mismo presupuesto cambiando solo la fecha o el pueblo" }
+    ]
+  };
+  RAMAS[TAREAS.RUTAS] = {
+    titulo: "¿Qué es lo que más se te escapa hoy en una hoja de ruta?",
+    opciones: [
+      { v: "Qué cuadro de luz me voy a encontrar, o si es grupo electrógeno" },
+      { v: "Si el camión llega al escenario y a qué distancia está" },
+      { v: "Qué material va exactamente y quién lo carga" },
+      { v: "El chequeo de todos los proveedores una semana antes", ayuda: "«chequeamos todo una semana antes a todos los proveedores»" },
+      { v: "Que el que monta se entere de los detalles técnicos" }
+    ]
+  };
+  RAMAS[TAREAS.DOCUMENTACION] = {
+    titulo: "¿Qué es lo que más te cuesta de la documentación que piden los ayuntamientos?",
+    opciones: [
+      { v: "Encontrar cada papel cuando lo piden", ayuda: "Homologación del escenario, de la carpa y de las telas; truss; cuadro eléctrico; camión escenario con dimensiones y peso." },
+      { v: "Que cada ayuntamiento pida cosas distintas y enterarme a tiempo" },
+      { v: "Tenerla lista antes de que llegue la fecha" },
+      { v: "Que Rosa la prepare conforme la van pidiendo" }
+    ]
+  };
+  RAMAS[TAREAS.CARTELES] = {
+    titulo: "¿Qué es lo que más te cuesta de los carteles para redes?",
+    opciones: [
+      { v: "Que salgan con la antelación suficiente" },
+      { v: "Hacerlos y que queden bien", ayuda: "«los de imprimir son tres de cada 100 o menos»" },
+      { v: "Tener a mano las fotos y los datos de cada espectáculo" },
+      { v: "Que los haga Greta además de conseguir las reuniones", ayuda: "«prácticamente el 100 % de su trabajo es conseguir la reunión»" }
+    ]
+  };
+  RAMAS[TAREAS.CAMPANAS] = {
+    titulo: "¿Qué es lo que más te cuesta de las campañas de correo a los ayuntamientos?",
+    opciones: [
+      { v: "Tener la lista de concejales de cultura al día, filtrada por población", ayuda: "«costó muchas horas de la secretaría llamando»" },
+      { v: "Preparar el correo de cada campaña", ayuda: "La del 25N, la cabalgata de Navidad." },
+      { v: "Saber a quién le ha llegado y quién ha contestado" },
+      { v: "Que no se quede nadie fuera" }
+    ]
+  };
+
+  /* ====================================================================
+     5. LAS PREGUNTAS
+     Las tres primeras son las aprobadas y son constantes. Las demás
+     declaran CUÁNDO aparecen: si la visita termina sin que aparezcan, es
+     que no hacían falta. No hay un número máximo de preguntas: la visita
+     se detiene cuando no queda ningún hueco material que él deba resolver.
+     ==================================================================== */
+  var PREGUNTAS = [
+
+    /* ---------------- Las tres aprobadas ---------------- */
+    {
+      id: "tarea",
+      tipo: "single",
+      corto: "1. Tarea prioritaria",
+      titulo: "De las tareas que más tiempo te quitan, ¿cuál te gustaría ver funcionando en la primera versión?",
+      hecho: "mvpScope · alcance de la primera versión",
+      dueno: "Lo decido yo contigo en la revisión, con tu visto bueno",
+      opciones: [
+        TAREAS.PRESUPUESTOS, TAREAS.RUTAS, TAREAS.DOCUMENTACION, TAREAS.CARTELES, TAREAS.CAMPANAS
+      ],
+      otra: { etiqueta: "¿Cuál?", placeholder: "Escríbelo con tus palabras" }
+    },
+    {
+      id: "tiempo",
+      tipo: "single",
+      corto: "2. Tiempo en el mes punta",
+      titulo: "En un mes de mucha actividad, ¿cuántas horas le dedica aproximadamente el equipo a esa tarea?",
+      nota: "Piensa en tu mes punta, no en uno tranquilo: a ojo me sirve.",
+      eco: true,
+      hecho: "Apoyo · magnitud del tiempo",
+      dueno: "Hago la propuesta sin la magnitud y te lo digo claramente",
+      opciones: [
+        "Menos de 10 horas", "Entre 10 y 20 horas", "Entre 21 y 40 horas", "Más de 40 horas"
+      ],
+      otra: { etiqueta: "Si te resulta más fácil, dímelo a tu manera", placeholder: "Por ejemplo: unas 6 horas a la semana" }
+    },
+    {
+      id: "disponibilidad",
+      tipo: "multi",
+      corto: "3. Cómo compruebas la disponibilidad",
+      titulo: "Cuando un cliente te pide una fecha, ¿cómo compruebas hoy que tienes libres al artista, el equipo y el material que le vas a ofrecer?",
+      nota: "No hablo de buscar papeles, sino de saber si algo está libre ese día.",
+      ayuda: "Puedes marcar varias.",
+      hecho: "resourceCapacity · comprobación de disponibilidad",
+      dueno: "Lo resuelvo yo con tu informático: es una incógnita técnica, no tuya",
+      opciones: [OP.PROGRAMA_YA, OP.EMPRESA_POR_EMPRESA, OP.TELEFONO, OP.CABEZA, OP.NAVE],
+      otra: { etiqueta: "¿Cómo lo haces?", placeholder: "Escríbelo con tus palabras" }
+    },
+
+    /* ---------------- Tarjeta A ---------------- */
+    {
+      id: "momento",
+      tipo: "single",
+      condicional: true,
+      corto: "A. Cuándo lo das por cogido",
+      titulo: "¿En qué momento das por cogido un artista o un material y dejas de ofrecerlo?",
+      nota: "Me refiero a cuándo lo reservas de verdad, no a cuándo se firma.",
+      hecho: "resourceCapacity · regla del bloqueo",
+      dueno: "Lo resuelvo yo con tu informático",
+      opciones: [
+        "En cuanto el cliente me firma el presupuesto",
+        "Cuando lo he confirmado con el artista o con el proveedor, aunque no esté firmado",
+        "Casi siempre, en cuanto mando el presupuesto: lo voy reservando a mano",
+        "No lo tengo fijado: depende del artista y de la fecha"
+      ],
+      otra: { etiqueta: "¿Cómo lo haces?", placeholder: "Escríbelo con tus palabras" },
+      /* Ninguna tarjeta de disponibilidad se adelanta a la pregunta 3: si no
+         sabemos cómo lo comprueba hoy, no hay nada que profundizar todavía. */
+      tras: ["disponibilidad"],
+      cuando: function () {
+        return A_MANO.some(function (m) { return marcados("disponibilidad").indexOf(m) >= 0; });
+      }
+    },
+
+    /* ---------------- Tarjeta B ---------------- */
+    {
+      id: "aclaracion",
+      tipo: "single",
+      condicional: true,
+      corto: "B. Papeles o fechas",
+      titulo: "Quiero asegurarme de que no mezclo dos cosas.",
+      nota: "Buscar papeles ya sé que te cuesta. Aquí te pregunto otra cosa: si un artista, un equipo o un material están libres ese día.",
+      pregunta: "¿Cuál de las dos te quita más tiempo hoy?",
+      hecho: "Separación entre buscar papeles y comprobar fechas",
+      dueno: "Lo aclaro yo contigo",
+      opciones: [
+        "Buscar papeles y contratos que no sé en qué empresa están",
+        "Comprobar si algo está libre en una fecha",
+        "Las dos me quitan lo mismo"
+      ],
+      otra: { etiqueta: "¿Cuál más?", placeholder: "Escríbelo con tus palabras" },
+      tras: ["disponibilidad"],
+      cuando: function () {
+        return parecePapeles(textoLibre("disponibilidad")) || parecePapeles(textoLibre("momento"));
+      }
+    },
+
+    /* ---------------- Tarjeta C ---------------- */
+    {
+      id: "caidas",
+      tipo: "single",
+      condicional: true,
+      corto: "C. Veces que se ha caído algo",
+      titulo: "¿Cada cuánto te ha pasado que algo que dabas por libre resulta estar cogido?",
+      hecho: "resourceCapacity · magnitud del daño",
+      dueno: "Lo dejo anotado sin número y no lo invento",
+      opciones: [
+        "Casi nunca",
+        "Alguna vez al mes",
+        "Casi todas las semanas en temporada alta",
+        "No lo llevo contado"
+      ],
+      otra: { etiqueta: "¿Cada cuánto?", placeholder: "Escríbelo con tus palabras" },
+      tras: ["disponibilidad"],
+      cuando: function () {
+        var reales = marcados("disponibilidad").filter(function (v) {
+          return v !== NO_SE && v !== OTRA;
+        });
+        return reales.length > 1 || marcados("disponibilidad").indexOf(OP.CABEZA) >= 0;
+      }
+    },
+
+    /* ---------------- Tarjeta D ---------------- */
+    {
+      id: "falta",
+      tipo: "single",
+      condicional: true,
+      corto: "D. Qué te haría falta",
+      titulo: "Para no tener que pasear por las cuatro empresas cuando miras una fecha, ¿qué te haría falta?",
+      hecho: "resourceCapacity · solución",
+      dueno: "Lo decido yo en la revisión interna",
+      tras: ["disponibilidad", "caidas"],
+      opciones: [
+        "Ver de una vez qué está libre ese día en las cuatro",
+        "Verlo junto al presupuesto que estoy haciendo, sin cambiar de pantalla",
+        "Que me avise si algo ya está cogido antes de ofrecérselo al cliente",
+        NADA_MAS
+      ],
+      otra: { etiqueta: "¿Qué te haría falta?", placeholder: "Escríbelo con tus palabras" },
+      cuando: function () {
+        /* Si el programa ya le muestra la disponibilidad entre las cuatro, la
+           vista compartida sale del alcance y esta tarjeta no se muestra. */
+        if (marcados("disponibilidad").indexOf(OP.PROGRAMA_YA) >= 0) return false;
+        /* Y si ha dicho que casi nunca se le cae nada, no se profundiza más.
+           Vale tanto si C se ha respondido como si no se ha llegado a
+           preguntar (con el programa ya viéndolo, C no aplica): un problema
+           que él no tiene no se pregunta. */
+        if (marcados("caidas")[0] === "Casi nunca") return false;
+        return true;
+      }
+    },
+
+    /* ---------------- Tarjeta E ---------------- */
+    {
+      id: "tareaDetalle",
+      tipo: "single",
+      condicional: true,
+      corto: "E. Qué te cuesta en esa tarea",
+      titulo: function () {
+        var rama = RAMAS[valorTarea()];
+        return rama ? rama.titulo : "";
+      },
+      hecho: "mvpScope · profundización de la tarea elegida",
+      dueno: "Lo decidimos en la revisión, contigo",
+      tras: ["tarea"],
+      opciones: function () {
+        var rama = RAMAS[valorTarea()];
+        return rama ? rama.opciones : [];
+      },
+      otra: { etiqueta: "¿Qué es lo que más te cuesta?", placeholder: "Escríbelo con tus palabras" },
+      cuando: function () {
+        return !!RAMAS[valorTarea()];
+      }
+    },
+
+    /* ---------------- Tarjeta F ---------------- */
+    {
+      id: "tareaDesconocida",
+      tipo: "texto",
+      condicional: true,
+      corto: "F. Cuál es la tarea y quién la hace",
+      titulo: "¿Cuál es esa tarea, y quién la hace?",
+      nota: "Con una línea me vale.",
+      hecho: "mvpScope · tarea no listada",
+      dueno: "Lo propongo yo, con tu visto bueno",
+      tras: ["tarea"],
+      cuando: function () {
+        var t = valorTarea();
+        return t === NO_SE || t === OTRA;
+      }
+    },
+
+    /* ---------------- Tarjeta H: confirmar la deducción ---------------- */
+    {
+      id: "exitoDeducido",
+      tipo: "single",
+      condicional: true,
+      confirma: true,
+      /* Esta tarjeta no es una pregunta suya: es la comprobación de una
+         conclusión mía. Por eso no cuenta como respuesta nueva en el mensaje:
+         si él la confirma, la deducción sube a «lo que has confirmado tú». */
+      extra: true,
+      corto: "H. Confirmar la conclusión",
+      titulo: "Una cosa más: quiero comprobar que no me he equivocado.",
+      nota: "Esto no me lo has dicho tú: lo he deducido de lo que me has contado. Antes de cerrar, lo miramos un momento.",
+      hecho: "successMetric · confirmación de la conclusión",
+      dueno: "Lo resuelvo yo contigo",
+      notaPendiente: "No supiste decirlo. Queda pendiente como incógnita y te lo pregunto yo directamente, sin inventarme la respuesta.",
+      opciones: [SI_ESO, NO_CORREGIR, NO_SE],
+      textoSiempre: { etiqueta: "O dímelo con tus palabras", placeholder: "Por ejemplo: que no se me pase ninguna fecha" },
+      tras: ["tarea", "disponibilidad", "momento", "aclaracion", "caidas", "falta",
+             "tareaDetalle", "tareaDesconocida"],
+      cuando: function () {
+        /* Solo tiene sentido si hay algo que comprobar y él no lo ha visto
+           todavía. Si ya dijo que no, que no lo sabe, o lo confirmó, la tarjeta
+           no aplica (y así deja de bloquear la pregunta del éxito). */
+        return tocaConfirmar() && !!deduccionExito();
+      }
+    },
+
+    /* ---------------- Tarjeta G ---------------- */
+    {
+      id: "exito",
+      tipo: "single",
+      condicional: true,
+      corto: "G. Qué te haría decir que funciona",
+      titulo: "¿Qué te haría decir que la aplicación te sirve de verdad?",
+      hecho: "successMetric · criterio de éxito",
+      dueno: "Lo dejo anotado como incógnita y lo resuelvo yo contigo",
+      opciones: function () {
+        var lista = [
+          "Poder confirmar una fecha sin llamar a nadie",
+          "Que el presupuesto y el contrato salgan sin rehacer nada"
+        ];
+        /* La del papeleo solo tiene sentido si eligió esa tarea. */
+        var t = valorTarea();
+        if (t === TAREAS.DOCUMENTACION || t === TAREAS.RUTAS) {
+          lista.push("Tener el papeleo del ayuntamiento y la hoja de ruta listos a la vez");
+        }
+        /* La de las cuatro empresas se omite solo si dijo que YA lo ve entre
+           las cuatro. Si se apaña mirando empresa por empresa, la opción se
+           mantiene: eso no es tenerlo resuelto. */
+        if (!tieneVistaDeLasCuatro()) {
+          lista.push("Que se me acaben las vueltas entre las cuatro empresas");
+        }
+        lista.push("Ganar tiempo en lo que ya hago, con la misma gente");
+        return lista;
+      },
+      otra: { etiqueta: "¿Qué te haría decir eso?", placeholder: "Escríbelo con tus palabras" },
+      cuando: function () { return tocaPreguntarExito(); }
+    }
+  ];
+
+  /* ====================================================================
+     6. ESTADO Y AYUDAS
+     ==================================================================== */
+
+  var form = document.getElementById("form");
+  var contenedor = document.getElementById("preguntas");
+  var result = document.getElementById("result");
+  var toast = document.getElementById("toast");
+  var saved = document.getElementById("saved");
+  var pasos = document.getElementById("pasos");
+  var avisoRecuperado = document.getElementById("aviso-recuperado");
+  var btnVolver = document.getElementById("volver");
+  /* La caja de «Empezar de nuevo» vive en la zona principal del cuestionario, y
+     es la misma que decide visibilidadBotones: se resuelve aquí arriba para que
+     ningún pintado pueda correr antes de que exista. */
+  var cajaReiniciar = document.getElementById("reiniciar");
+  var cajaConf = document.getElementById("reiniciar-conf");
+  var btnAbrirReiniciar = document.getElementById("reiniciar-abrir");
+  var btnSiReiniciar = document.getElementById("reiniciar-si");
+  var btnNoReiniciar = document.getElementById("reiniciar-no");
+
+  /* Las tres preguntas aprobadas: constantes y siempre las primeras. */
+  var CONSTANTES = PREGUNTAS.filter(function (p) { return !p.condicional; });
+
+  var estado = {
+    v: STORAGE_VERSION,
+    respuestas: {},
+    /* Cómo ha quedado la comprobación de mi conclusión. Se guarda aparte, en un
+       sitio duradero: así no se pierde por un repintado de la tarjeta, y una
+       conclusión sin confirmar no se puede convertir en un hecho por descuido.
+         ""           · sin conclusión o sin preguntar todavía
+         "si"         · la ha confirmado: es suya, confirmada por el cliente
+         "no"         · no está de acuerdo: se le pregunta a él
+         "no-lo-se"   · no sabe: incógnita declarada, con dueño */
+    confirmacion: "",
+    conclusion: "",
+    exitoConfirmado: false,
+    /* El recorrido, guardado tal cual: `pantallas` son las pantallas que ha ido
+       descubriendo, en orden, cada una con las preguntas que le enseñó, y
+       `pantalla` es en la que está mirando (el índice, ANTES para la primera, o
+       RESUMEN para el resumen). Con eso, «Atrás» devuelve la pantalla anterior
+       tal cual, con sus respuestas, y «Continuar» sigue hacia delante. */
+    pantallas: [],
+    pantalla: ANTES,
+    preguntadas: []
+  };
+
+  function porId(id) {
+    for (var i = 0; i < PREGUNTAS.length; i++) if (PREGUNTAS[i].id === id) return PREGUNTAS[i];
+    return null;
+  }
+  function resp(id) {
+    return estado.respuestas[id] || { valores: [], otra: "", noSe: false };
+  }
+  /* La misma ficha, pero sin crearla: para leer, no para escribir. */
+  function respGuardada(id) {
+    return estado.respuestas[id] || null;
+  }
+  function respEditable(id) {
+    if (!estado.respuestas[id]) estado.respuestas[id] = { valores: [], otra: "", noSe: false };
+    return estado.respuestas[id];
+  }
+  function marcados(id) { return resp(id).valores.slice(); }
+  function textoLibre(id) { return (resp(id).otra || "").trim(); }
+  function valorTarea() { return marcados("tarea")[0] || null; }
+  function sinRespuesta(id) { return !estado.respuestas[id]; }
+
+  function opcionesDe(p) {
+    return typeof p.opciones === "function" ? p.opciones() : (p.opciones || []);
+  }
+  function valoresDeOpciones(p) {
+    return opcionesDe(p).map(function (o) { return typeof o === "string" ? o : o.v; });
+  }
+  function tituloDe(p) {
+    return typeof p.titulo === "function" ? p.titulo() : p.titulo;
+  }
+
+  /* --- ¿Está respondida? ---
+     «Aún no lo sé» es una respuesta de verdad: cierra la tarjeta y registra
+     la incógnita. No se le vuelve a preguntar lo mismo. */
+  function estaRespondida(p) {
+    var r = estado.respuestas[p.id];
+    if (!r) return false;
+    if (p.tipo === "texto") return r.noSe || (r.otra || "").trim().length > 0;
+    if (!r.valores.length) return false;
+    if (r.valores.indexOf(OTRA) >= 0) return (r.otra || "").trim().length > 0;
+    return true;
+  }
+
+  /* --- Condiciones de aparición --- */
+  function parecePapeles(texto) {
+    if (!texto) return false;
+    return /(papel|papeles|contrato|contratos|documento|documentos|archivador|expediente|fichero|homologaci|buscar|busco|encontrar|encuentro|carpeta)/i.test(texto);
+  }
+  /* --- ¿La disponibilidad está resuelta, o solo apañada? ---
+     Son dos cosas distintas y no se pueden confundir:
+       · RESUELTA: el programa ya se la muestra entre las cuatro.
+       · APAÑADA:  comprueba empresa por empresa y con eso le vale.
+     Lo apañado no es un problema que haya que arreglar, y por eso mismo no se
+     le puede deducir ningún objetivo sobre la disponibilidad. */
+  function disponibilidadResuelta() {
+    if (marcados("disponibilidad").indexOf(OP.PROGRAMA_YA) >= 0) return true;
+    return disponibilidadApanyada();
+  }
+  function tieneVistaDeLasCuatro() {
+    return marcados("disponibilidad").indexOf(OP.PROGRAMA_YA) >= 0;
+  }
+  function disponibilidadApanyada() {
+    /* Lo dijo él con todas las letras: «nada, mirando empresa por empresa me
+       apaño». Lo que marca en la pregunta 3 es CÓMO lo comprueba hoy, no si le
+       vale: eso lo dice la tarjeta D. */
+    return marcados("falta").indexOf(NADA_MAS) >= 0;
+  }
+
+  /* --- Anulación de un apaño: la dimensión que él ha dado por buena ---
+     «Mirando empresa por empresa me apaño» (tarjeta D) anula la dimensión de
+     la disponibilidad. Si además dice que el programa ya se lo muestra, el
+     apaño también anula el papeleo: fue él quien pidió la búsqueda global de
+     contratos y aquí está diciendo que con el programa le vale. */
+  var DIM = { DISPONIBILIDAD: "disponibilidad", PAPELEO: "papeleo", TIEMPO: "tiempo" };
+
+  function claveDe(dim) {
+    /* Qué frase de las suyas anula esa dimensión. null = no la ha dado por
+       buena, así que no anula nada. */
+    if (dim === DIM.DISPONIBILIDAD) {
+      return disponibilidadApanyada() ? NADA_MAS : null;
+    }
+    if (dim === DIM.PAPELEO) {
+      return (disponibilidadApanyada() && tieneVistaDeLasCuatro()) ? NADA_MAS : null;
+    }
+    return null;
+  }
+
+  /* Textos donde él dice que una dimensión no es un problema. */
+  function textosApanyados() {
+    var lista = marcados("falta");
+    ["disponibilidad", "momento", "aclaracion", "tareaDetalle", "tarea", "exito"].forEach(function (id) {
+      var t = textoLibre(id);
+      if (t) lista.push(t);
+    });
+    return lista;
+  }
+
+  /* Palabras que dicen «esto no me hace falta» o «no me cuesta». */
+  var SIN_PROBLEMA = /(me apa(n|ñ)o|apa(n|ñ)ado|me vale|me sirve|no (me )?(hace|har[ií]a) falta|nada m[aá]s|no es un problema|no lo necesito|no me cuesta|no me supone|ning[uú]n problema)/i;
+
+  function textoAplana(t) {
+    return String(t).toLowerCase()
+      .replace(/[áàä]/g, "a").replace(/[éèë]/g, "e").replace(/[íìï]/g, "i")
+      .replace(/[óòö]/g, "o").replace(/[úùü]/g, "u").replace(/ñ/g, "n")
+      .replace(/[^a-z0-9]+/g, " ")
+      .replace(/^\s+|\s+$/g, "");
+  }
+  function mismoDicho(a, b) {
+    return textoAplana(a) === textoAplana(b);
+  }
+
+  /* Palabras clave de cada dimensión, para saber de qué está hablando.
+     Ojo: el léxico del papeleo es el de la BUSCA de papeles (archivador,
+     expediente, carpeta...), no cualquier mención a un contrato. Si no, una
+     tarea como «pasarlo a contrato y enviárselo a cada proveedor» se leería
+     como un problema de archivo, que es justo lo que no es. */
+  var CLAVES = {
+    disponibilidad: ["disponibilidad", "libre", "libres", "cogido", "cogida", "reserv", "ocupad",
+                     "fecha", "fechas", "empresa por empresa", "cuatro empresas", "artista", "artistas"],
+    papeleo: ["papeleo", "papel", "papeles", "documento", "documentos", "archiv", "expediente",
+              "carpeta", "contrato", "contratos", "homologaci", "factur"],
+    tiempo: ["tiempo", "horas", "hora", "minutos", "ganar tiempo", "competitividad", "personal"]
+  };
+  function hablaDe(texto, claves) {
+    var t = textoAplana(texto);
+    if (!t) return false;
+    for (var i = 0; i < claves.length; i++) {
+      if (t.indexOf(textoAplana(claves[i])) >= 0) return true;
+    }
+    return false;
+  }
+
+  /* --- Sus propias palabras sobre dónde está el problema ---
+     Todo lo que él mismo ha escrito o marcado al decir qué tarea le cuesta y
+     por qué. Se dibuja una sola vez y lo usan la deducción y sus anulaciones.
+     Ojo: el texto libre solo cuenta si NO es la opción que ha marcado. Leer la
+     opción marcada como si fuera texto suyo sería leer dos veces lo mismo (y,
+     en el caso de una tarea, inventarse un problema que él no ha nombrado). */
+  function textoEscrito(id) {
+    var t = textoLibre(id);
+    return t && marcados(id).indexOf(t) < 0 ? t : "";
+  }
+  function declaraciones() {
+    var d = [];
+    /* Su tarea elegida y lo que ha dicho que le cuesta en ella: eso es su
+       problema. Lo que responde en las tarjetas de disponibilidad (A, C, D) es
+       contexto, y leerlo como «problema» hacia atrás es justo lo que producía
+       conclusiones que no eran suyas. */
+    var e = marcados("tareaDetalle");
+    if (e.length && e[0] !== NO_SE && e[0] !== OTRA) d.push(e[0]);
+    d.push(textoEscrito("tareaDetalle"));
+    var f = marcados("tareaDesconocida");
+    if (f.length && f[0] !== NO_SE && f[0] !== OTRA) d.push(f[0]);
+    d.push(textoEscrito("tareaDesconocida"));
+    var t = marcados("tarea");
+    if (t.length && t[0] !== NO_SE && t[0] !== OTRA) d.push(t[0]);
+    d.push(textoEscrito("tarea"));
+    return d.filter(function (x) { return !!x; });
+  }
+
+  /* ¿Hay algo que él haya dado por bueno y que esta conclusión tocaría?
+     Solo cuenta lo que él ha dicho con todas las letras, no lo que yo
+     interprete: si no ha dicho que algo no sea un problema, no se anula nada. */
+  function estaAnulada(dim) {
+    var clave = claveDe(dim);
+    if (!clave) return false;
+    var dichos = textosApanyados();
+    for (var i = 0; i < dichos.length; i++) {
+      if (mismoDicho(dichos[i], clave)) return true;
+    }
+    return false;
+  }
+
+  /* --- ¿Qué problema ha señalado él? ---
+     Se mira lo que ha respondido al elegir su tarea y lo que ha escrito con
+     sus palabras. Nada de esto se le enseña: solo decide si una conclusión mía
+     se sostiene o si hay que preguntarle a él. Lo que él marque como problema
+     cuenta como problema: aquí no se filtra por «me apaño» (de eso se encarga
+     estaAnulada, y solo cuando ha dicho que no necesita cambios). */
+  function esSuDificultad(dim) {
+    var dichos = declaraciones();
+    for (var i = 0; i < dichos.length; i++) {
+      if (hablaDe(dichos[i], CLAVES[dim])) return true;
+    }
+    return false;
+  }
+
+  /* --- Qué problema ha señalado él, y con qué se mide que esté resuelto ---
+     El éxito no se deduce de lo que yo veo en la pregunta 3: se deduce del
+     problema que él mismo ha señalado al elegir su tarea. Esta tabla es esa
+     correspondencia, escrita una sola vez. */
+  function objetivoDe(dim) {
+    if (dim === DIM.DISPONIBILIDAD) {
+      return { texto: "Dejar de comprobar a mano si está libre",
+               regla: "Lo he deducido de lo que me has contado: hoy la disponibilidad la compruebas a mano." };
+    }
+    if (dim === DIM.PAPELEO) {
+      return { texto: "No buscarlo a mano entre las cuatro empresas",
+               regla: "Lo he deducido de lo que me has contado: buscar cada papel entre las cuatro empresas te cuesta tiempo." };
+    }
+    return { texto: "Ganar tiempo en lo que ya hago, con la misma gente",
+             regla: "Lo he deducido de lo que me has contado: lo que te cuesta es el tiempo." };
+  }
+
+  /* --- La deducción, tal cual, sin decidir nada ---
+     Devuelve la conclusión posible (con su porqué) o null si aquí no hay nada
+     que deducir. No mira si ya está confirmada: eso es cosa de quien la usa. */
+  function deduccionExito() {
+    if (disponibilidadApanyada()) return null;   /* ya dijo que así se apaña */
+
+    var d = marcados("disponibilidad");
+    var dim = DIM.DISPONIBILIDAD;
+    var hayVia = d.indexOf(OP.PROGRAMA_YA) >= 0;
+    if (hayVia) {
+      /* El programa ya se lo muestra: él mismo pidió la búsqueda global de
+         contratos, así que la conclusión posible es no buscarlo a mano. */
+      dim = DIM.PAPELEO;
+    } else {
+      for (var i = 0; i < A_MANO.length; i++) {
+        if (d.indexOf(A_MANO[i]) >= 0) { hayVia = true; break; }
+      }
+    }
+    if (!hayVia) return null;
+
+    var suyos = [DIM.DISPONIBILIDAD, DIM.PAPELEO, DIM.TIEMPO];
+    var declaradas = [];
+    for (var j = 0; j < suyos.length; j++) {
+      if (esSuDificultad(suyos[j])) declaradas.push(suyos[j]);
+    }
+    /* Si no ha señalado ningún problema, no se le deduce nada: se le pregunta
+       (tarjeta G). Y si ha señalado el tiempo, la conclusión sobre la
+       disponibilidad (o sobre el papeleo) no es su criterio de éxito: tampoco. */
+    if (!declaradas.length) return null;
+    if (declaradas.indexOf(DIM.TIEMPO) >= 0 && dim !== DIM.TIEMPO) return null;
+
+    if (estaAnulada(dim)) return null;           /* contradice lo que ya dijo */
+
+    var objetivo = objetivoDe(dim);
+    return { texto: objetivo.texto, regla: objetivo.regla, confirmado: false };
+  }
+
+  /* --- Cómo ha quedado la comprobación de esa conclusión ---
+     Se lee del estado duradero, no de la tarjeta: así no lo puede borrar un
+     repintado, y la respuesta no se pierde por la pantalla. */
+  function revisionDeLaDeduccion() {
+    var guardada = estado.confirmacion;
+    if (guardada) return guardada;
+    /* Y si viene de una visita anterior, se recupera de la propia respuesta. */
+    var r = estado.respuestas.exitoDeducido;
+    if (!r) return "pendiente";
+    if (r.valores.indexOf(SI_ESO) >= 0) return "si";
+    if (r.valores.indexOf(NO_CORREGIR) >= 0) return "no";
+    if (r.valores.indexOf(NO_SE) >= 0) return "no-lo-se";
+    return "pendiente";
+  }
+  function deduccionConfirmada() { return revisionDeLaDeduccion() === "si"; }
+  function deduccionResuelta() {
+    /* Si ya lo ha dicho él (tarjeta G), no hay nada que confirmar: es suyo. */
+    if (estado.respuestas.exito) return true;
+    var v = revisionDeLaDeduccion();
+    /* «No está de acuerdo» no está resuelto hasta que él diga cuál es su
+       criterio de éxito: hasta entonces hay que preguntárselo. */
+    if (v === "no") return !!estado.respuestas.exito;
+    return v === "si" || v === "no-lo-se";
+  }
+  /* ¿Toca preguntarle por mi conclusión? Mientras no la haya visto, sí. Es la
+     llave que impide que el cuestionario se cierre sin su visto bueno. */
+  function tocaConfirmar() {
+    if (estado.respuestas.exito) return false;
+    /* Si no está de acuerdo, lo que toca no es insistir con mi conclusión: es
+       preguntarle a él cuál es su criterio (tarjeta G). */
+    if (revisionDeLaDeduccion() === "no") return false;
+    return deduccionExito() && !deduccionResuelta();
+  }  /* ¿Toca preguntarle su criterio de éxito con la tarjeta G? */
+  function tocaPreguntarExito() {
+    if (estado.respuestas.exito) return false;
+    /* Solo después de que él haya visto mi conclusión: mientras esté pendiente,
+       primero se le pregunta por ella. */
+    if (tocaConfirmar()) return false;
+    /* No se adelanta a ninguna de las tarjetas de las que depende su contenido:
+       primero se pregunta, y con eso se filtra esta. */
+    return ["tarea", "disponibilidad", "momento", "aclaracion", "caidas", "falta",
+            "tareaDetalle", "tareaDesconocida"].every(resueltaONoAplica);
+  }
+
+  /* --- El criterio de éxito que se le enseña y que viaja en el mensaje ---
+     Solo hay dos formas de que sea SUYO: que lo haya dicho él (tarjeta G) o que
+     haya confirmado la conclusión (tarjeta H). Una deducción sin confirmar no se
+     convierte nunca en un hecho: no cierra el briefing mientras esté pendiente,
+     y si no la confirma, se le pregunta a él.
+
+     Y «Aún no lo sé» en la tarjeta H manda sobre lo que haya respondido en la G:
+     entonces NO hay criterio de éxito, hay una incógnita declarada. Sin esto, un
+     «Aún no lo sé» que él acababa de escribir viajaba como dato confirmado. */
+  function exitoDeducido() {
+    if (revisionDeLaDeduccion() === "no-lo-se") return null;
+    if (estado.respuestas.exito) {
+      /* Ya lo ha dicho él: eso manda sobre cualquier deducción mía. */
+      var p = porId("exito");
+      var suyo = textoRespuesta(p);
+      if (!suyo || suyo === NO_SE) return null;
+      return { texto: suyo, regla: "Me lo has dicho tú: esto es tuyo.", confirmado: true };
+    }
+    if (deduccionConfirmada()) {
+      return { texto: textoRespuesta(porId("exitoDeducido")),
+               regla: "Lo has confirmado tú.", confirmado: true };
+    }
+    /* Mientras esté sin confirmar sigue siendo una deducción: se enseña como tal
+       y no cierra el briefing. Pero si ya ha dicho que no, o que no lo sabe, no
+       se le vuelve a poner delante: eso ya está resuelto. */
+    if (deduccionResuelta()) return null;
+    /* Si no está de acuerdo, la conclusión ya no vale: se le pregunta a él. */
+    if (revisionDeLaDeduccion() === "no") return null;
+    return deduccionExito();
+  }
+
+  /* --- Estado del briefing: ni cerrado ni a medias ---
+     Material es todo dato que él deba confirmar: una pregunta que sigue
+     aplicable, o una conclusión mía que todavía no ha visto. Mientras quede
+     algo de eso, el briefing NO está cerrado. */
+  function briefingCerrado() {
+    if (preguntasAplicables().length) return false;
+    /* Una conclusión mía SIN confirmar impide cerrar. Confirmada, o dicha por él,
+       ya es un dato suyo y no bloquea nada. */
+    var conclusion = exitoDeducido();
+    if (conclusion && !conclusion.confirmado) return false;
+    return true;
+  }
+  /* --- El estado del cuestionario, sin adornos ---
+     «Completado» habla del cuestionario, no del proyecto: solo se dice cuando
+     no queda ninguna pregunta aplicable Y no hay ninguna conclusión mía sin
+     confirmar. Es la misma frase que viaja en el mensaje, para no decir dos
+     cosas distintas en dos sitios. */
+  function estadoBriefing() {
+    var huecos = preguntasAplicables().length;
+    var conclusion = exitoDeducido();
+    var sinConfirmar = !!conclusion && !conclusion.confirmado;
+    if (!huecos && !sinConfirmar) {
+      return { cerrado: true, aviso: textoEstadoMensaje() + " Todo lo de arriba lo has confirmado tú." };
+    }
+    if (sinConfirmar && !huecos) {
+      return { cerrado: false, aviso: "Cuestionario no completado todavía: hay una conclusión mía sin confirmar. La doy por buena solo si me dices que sí." };
+    }
+    return { cerrado: false, aviso: "Cuestionario no completado: queda " + huecos + (huecos === 1 ? " pregunta" : " preguntas") + " aplicable" + (huecos === 1 ? "" : "s") + "." };
+  }
+  function resueltaONoAplica(id) {
+    var p = porId(id);
+    if (!p) return true;
+    return estaRespondida(p) || !aplica(p);
+  }
+  function aplica(p) {
+    var previas = p.tras || [];
+    for (var i = 0; i < previas.length; i++) {
+      var q = porId(previas[i]);
+      if (q && aplica(q) && !estaRespondida(q)) return false;
+    }
+    return p.cuando ? !!p.cuando() : true;
+  }
+  function aplicaSinTras(p) {
+    return p.cuando ? !!p.cuando() : true;
+  }
+  function preguntasAplicables() {
+    return PREGUNTAS.filter(function (p) { return !estaRespondida(p) && aplica(p); });
+  }
+
+  /* --- ¿Esta respuesta sigue encajando? ---
+     Ojo con el criterio de éxito: lo que hay guardado ahí puede ser una opción
+     de la pregunta o la conclusión que él ha confirmado, que no está en la lista
+     de opciones. En ese caso no se tira: es una respuesta suya. */
+  function opcionValida(p, r) {
+    if (p.tipo === "texto") return true;
+    var validas = valoresDeOpciones(p).concat([NO_SE, OTRA]);
+    if (p.id === "exito") validas = validas.concat(r.valores);
+    return !r.valores.some(function (v) { return validas.indexOf(v) < 0; });
+  }
+
+  /* --- Depuración: una respuesta que ya no encaja no se conserva ---
+     Si cambia una respuesta anterior, las que dependían de ella se caen: no se
+     queda un dato contradiciéndose a sí mismo ni una opción que ya no se ofrece.
+
+     Ojo con el matiz que importaba: «dependía de ella» es que la respuesta
+     anterior se haya CAÍDO, no que en este momento no se pregunte. Mientras la
+     respuesta de la que depende siga en pie, lo que él contestó se conserva
+     aunque no se vuelva a preguntar. Si no, una respuesta suya desaparecía sola
+     —y con ella su problema, que es lo que decide la demo— por un cambio de
+     pantalla que no tenía nada que ver. */
+  function depurarRespuestas() {
+    var cambio = true, vueltas = 0;
+    while (cambio && vueltas++ < 10) {
+      cambio = false;
+      PREGUNTAS.forEach(function (p) {
+        var r = estado.respuestas[p.id];
+        if (!r) return;
+        /* Lo que él ya ha contestado sobre mi conclusión y sobre su criterio de
+           éxito no se toca: una vez que lo ha dicho, es suyo, y no se cae porque
+           la tarjeta deje de mostrarse. Solo se limpia cuando cambia lo de
+           atrás de verdad (eso lo cubre la regla de las dependencias caídas). */
+        if ((p.id === "exitoDeducido" || p.id === "exito") && estaRespondida(p)) return;
+        var fuera = false;
+        /* Su condición propia sí manda: si ya no se cumple, no se conserva. */
+        if (!aplicaSinTras(p)) fuera = true;
+        /* Y una respuesta anterior que se haya caído también se lo lleva. */
+        if (!fuera) {
+          (p.tras || []).forEach(function (id) {
+            var q = porId(id);
+            if (q && aplicaSinTras(q) && !estaRespondida(q)) fuera = true;
+          });
+        }
+        if (!fuera && !opcionValida(p, r)) fuera = true;
+        if (fuera) { delete estado.respuestas[p.id]; cambio = true; }
+      });
+    }
+  }
+
+  /* ====================================================================
+     7. PINTAR LA RONDA
+     Se enseña un grupo pequeño. Lo que sigue se calcula con lo anterior:
+     nunca se ve una pregunta futura.
+     ==================================================================== */
+
+  /* --- Subir la pantalla hasta arriba del todo ---
+     Cada vez que aparecen preguntas nuevas o el resumen final, la pantalla
+     sube sola a la posición 0: Pedro vuelve a ver la cabecera de Agencia
+     Automat y no tiene que desplazarse a mano. Vale igual en el móvil y en el
+     ordenador.
+     Se pide DE UNA VEZ («instant»), que manda sobre el desplazamiento suave de
+     la hoja de estilos: medido en el navegador, con la animación la página se
+     quedaba a medio camino (a los 160 ms de pulsar iba por 175 px de 605, y al
+     volver atrás se quedaba abajo del todo) y había que subir a mano.
+     El primer pintado no mueve nada: al abrir, la pantalla ya está arriba,
+     viendo la cabecera y la introducción. */
+  var primerPintado = true;
+  function volverArriba() {
+    if (primerPintado) { primerPintado = false; return; }
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }
+
+  function escapar(t) {
+    return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  /* --- La navegación, por PANTALLAS ---
+     Una pantalla es lo que se le enseña de una vez (su grupo de preguntas).
+     `pantallas` guarda, en orden, las que ha ido descubriendo, cada una con las
+     preguntas EXACTAS que le enseñó: así, al volver a una anterior, se le
+     devuelve la misma, con lo que él dejó marcado, y no otra recalculada.
+     `pantalla` es en la que está mirando:
+       · ANTES             → se ve la primera pantalla (las tres aprobadas);
+       · el índice de una  → esa pantalla, tal cual se le enseñó;
+       · RESUMEN           → el resumen, que no es una pantalla.
+     La pantalla en la que está NO se recalcula mientras la tiene delante: si al
+     marcar una tarjeta cambiaran las condiciones, le desaparecerían de las manos
+     las que le quedan por contestar. Lo que se recalcula es la SIGUIENTE, que se
+     mira justo después de contestar: eso es lo que hace que el recorrido sea
+     adaptativo. */
+  function enRevision() { return estado.pantalla === RESUMEN; }
+  /* Las tres aprobadas: la primera pantalla, siempre. */
+  function preguntasDeLaPrimera() {
+    return PREGUNTAS.filter(function (p) { return !p.condicional; }).map(function (p) { return p.id; });
+  }
+  /* Las preguntas guardadas de una pantalla descubierta. */
+  function pantallaGuardada(indice) {
+    return ((estado.pantallas || [])[indice] || []).slice();
+  }
+  /* Cuántas pantallas tiene descubiertas ahora mismo: las guardadas y, si está
+     en una nueva, esa. Es el número real, no una estimación de lo que falta. */
+  function pantallasDescubiertas() {
+    var guardadas = (estado.pantallas || []).length;
+    if (enRevision()) return guardadas;
+    return Math.max(guardadas, Math.max(0, estado.pantalla) + 1);
+  }
+  /* Las preguntas de la pantalla que tiene delante. */
+  function preguntasDeLaPantalla() {
+    if (estado.pantalla === ANTES) return preguntasDeLaPrimera();
+    if (enRevision()) return [];
+    var guardada = pantallaGuardada(estado.pantalla);
+    return guardada.length ? guardada : preguntasNuevas();
+  }
+  /* Las que le tocarán en la pantalla siguiente, calculadas con lo que acaba de
+     contestar. Solo se miran para saber si hay pantalla nueva; no se guardan
+     hasta que la ve. */
+  function preguntasNuevas() {
+    return PREGUNTAS.filter(function (p) {
+      return !estaRespondida(p) && aplica(p);
+    }).slice(0, TAMANO_PANTALLA).map(function (p) { return p.id; });
+  }
+  function tarjetasDeLaPantalla() {
+    return preguntasDeLaPantalla().map(porId).filter(Boolean);
+  }
+  /* ¿Hay alguna pantalla después de la que está mirando? */
+  function hayPantallaDespues() {
+    if (enRevision()) return false;
+    var guardada = pantallaGuardada(estado.pantalla);
+    if (guardada.length) return true;                    /* la tiene delante */
+    var siguiente = Math.max(0, estado.pantalla) + 1;
+    if (pantallaGuardada(siguiente).length) return true; /* ya la descubrió */
+    return preguntasNuevas().length > 0;                 /* o la pide lo nuevo */
+  }
+  /* El hueco donde se guarda la pantalla que tiene delante. La primera también
+     es una pantalla: la número 1. */
+  function huecoDeLaPantalla() {
+    return Math.max(0, estado.pantalla);
+  }
+
+  /* --- Qué se puede hacer desde donde está ---
+     Los tres controles se deciden en un solo sitio, con el estado delante. */
+  function hayAtras() {
+    if (enRevision()) return true;                 /* vuelve a la última pantalla */
+    /* En la primera pantalla no hay nada más atrás: ni la pantalla ni el botón. */
+    if (estado.pantalla <= ANTES) return false;
+    return estado.pantalla > RESUMEN;
+  }
+  /* Solo se le ofrece seguir cuando queda algo por delante. */
+  function hayDelante() {
+    return hayPantallaDespues();
+  }
+  /* Mientras queden preguntas aplicables, lo único que se le puede ofrecer es
+     seguir: el resumen todavía no está listo. */
+  function textoContinuar() {
+    return preguntasAplicables().length ? "Continuar" : "Ver mis respuestas";
+  }
+
+  /* --- Adónde se va después de contestar una pantalla ---
+     Un solo sitio decide si le queda algo por delante (y pasa a la pantalla
+     siguiente) o si ya está todo (y pasa al resumen). Lo deciden igual el botón de
+     confirmar y la navegación: si se decidiera en dos sitios, uno podría quedarse
+     atrás. La pantalla que acaba de contestar queda en su sitio, y se sigue por la
+     siguiente: nunca se le vuelve a enseñar la misma que acaba de cerrar. */
+  function pantallaTrasContestar() {
+    return hayPantallaDespues() ? huecoDeLaPantalla() + 1 : RESUMEN;
+  }
+
+  /* --- Navegar: atrás y adelante, sin tocar ninguna respuesta ---
+     Volver a una pantalla anterior no borra nada: se vuelve a pintar la misma,
+     con lo que él dejó marcado. Y seguir hacia delante recorre el mismo camino
+     que ya hizo, hasta la última pantalla descubierta. */
+  function navegar(delta) {
+    if (delta < 0) {
+      var atras;
+      if (enRevision()) {
+        /* Del resumen se vuelve a la última pantalla; y si no descubrió ninguna,
+           a la primera. */
+        atras = (estado.pantallas || []).length ? (estado.pantallas || []).length - 1 : ANTES;
+      } else {
+        atras = estado.pantalla - 1;
+      }
+      /* Si no hay nada más atrás, no se mueve nada: ni la pantalla ni el sitio
+         donde está. Sin esto, desde la primera volvía a la última. */
+      if (atras < ANTES || atras === estado.pantalla) return;
+      estado.pantalla = atras;
+    } else {
+      var siguiente = estado.pantalla + 1;
+      if (siguiente < (estado.pantallas || []).length) {
+        estado.pantalla = siguiente;
+      } else {
+        /* A la pantalla nueva, o al resumen si ya no le queda nada. */
+        var destino = pantallaTrasContestar();
+        if (destino === estado.pantalla) return;
+        estado.pantalla = destino;
+      }
+      /* Al pasar de página se vuelve a mirar la pantalla desde arriba. */
+      if (!enRevision()) volverArriba();
+    }
+    guardar();
+    pintarLoQueToca();
+  }
+
+  function htmlOpciones(p) {
+    var multi = p.tipo === "multi";
+    var h = '<fieldset class="opts"' + (multi ? ' data-multi="1"' : '') +
+            ' aria-labelledby="lbl-' + p.id + '">' +
+            '<legend class="sr-only">' + escapar(tituloDe(p)) + '</legend>';
+    opcionesDe(p).forEach(function (o) {
+      var v = typeof o === "string" ? o : o.v;
+      var ayuda = typeof o === "string" ? "" : (o.ayuda || "");
+      h += '<label class="opt"><input type="' + (multi ? "checkbox" : "radio") +
+           '" name="' + p.id + '" value="' + escapar(v) + '">' +
+           '<span class="opt__box"><span class="opt__tick" aria-hidden="true"></span>' +
+           '<span class="opt__label">' + escapar(v) +
+           (ayuda ? '<span class="opt__quote">' + escapar(ayuda) + '</span>' : '') +
+           '</span></span></label>';
+    });
+    if (p.tipo !== "texto") {
+      h += '<label class="opt opt--soft"><input type="' + (multi ? "checkbox" : "radio") +
+           '" name="' + p.id + '" value="' + NO_SE + '" data-exclusive-soft="1">' +
+           '<span class="opt__box"><span class="opt__tick" aria-hidden="true"></span>' +
+           '<span class="opt__label">' + NO_SE + '</span></span></label>';
+      if (p.otra) {
+        h += '<label class="opt opt--soft"><input type="' + (multi ? "checkbox" : "radio") +
+             '" name="' + p.id + '" value="' + OTRA + '" data-other="1">' +
+             '<span class="opt__box"><span class="opt__tick" aria-hidden="true"></span>' +
+             '<span class="opt__label">Otra opción</span></span></label>';
+      }
+    }
+    h += '</fieldset>';
+    return h;
+  }
+
+  function pintarPregunta(p) {
+    var sec = document.createElement("section");
+    sec.className = "q" + (p.condicional ? " q--seguimiento" : "");
+    sec.id = "q-" + p.id;
+    sec.setAttribute("data-pregunta", p.id);
+
+    /* Las tres aprobadas conservan su numeración aunque la visita se retome a
+       medias: son la 1, la 2 y la 3, siempre. Las de seguimiento no llevan
+       número porque no hay un total fijo de preguntas. */
+    var h = "";
+    h += '<p class="q__num">' +
+         (p.condicional ? "Una cosa más" : "Pregunta " + (CONSTANTES.indexOf(p) + 1) + " de 3") +
+         '</p>';
+    h += '<h2 class="q__title" id="lbl-' + p.id + '">' + escapar(tituloDe(p)) + '</h2>';
+    if (p.nota) h += '<p class="q__note">' + p.nota + '</p>';
+    if (p.ayuda) h += '<p class="q__hint">' + escapar(p.ayuda) + '</p>';
+    if (p.pregunta) h += '<p class="q__ask">' + escapar(p.pregunta) + '</p>';
+    if (p.eco) h += '<p class="q__eco" id="eco-' + p.id + '" hidden></p>';
+
+    if (p.confirma) {
+      /* La conclusión, a la vista, para que pueda decir si es suya o no. Se apunta
+         en el estado duradero (`estado.conclusion`), que es lo que se registrará
+         si la confirma. Ojo: pintar la tarjeta NO es contestarla. Aquí no se le
+         crea ninguna respuesta, porque eso sería ponerle en la boca algo que no
+         ha dicho (y al recuperar, contaría como suya). */
+      var deduccion = deduccionExito();
+      var guardada = respGuardada(p.id);
+      var textoDed = deduccion ? deduccion.texto : ((guardada && guardada.otra) || "");
+      if (textoDed) estado.conclusion = textoDed;
+      h += '<p class="q__eco q__eco--claro" id="ded-' + p.id + '" data-deduccion="' +
+           escapar(textoDed) + '">' +
+           "<b>" + escapar(textoDed) + "</b>" +
+           (deduccion ? "<em>" + escapar(deduccion.regla) + "</em>" : "") + '</p>';
+      h += '<p class="q__ask">¿Lo he entendido bien?</p>';
+    }
+
+    if (p.tipo === "texto") {
+      h += '<div class="other"><label for="in-' + p.id + '">Escríbelo con tus palabras, y dime quién la hace</label>' +
+           '<input id="in-' + p.id + '" type="text" name="' + p.id + '_otra" placeholder="Por ejemplo: las subvenciones, y las lleva Alex" autocomplete="off" enterkeyhint="done"></div>';
+      h += '<fieldset class="opts" aria-labelledby="lbl-' + p.id + '">' +
+           '<legend class="sr-only">' + escapar(tituloDe(p)) + '</legend>' +
+           '<label class="opt opt--soft"><input type="checkbox" name="' + p.id + '" value="' + NO_SE + '" data-exclusive-soft="1">' +
+           '<span class="opt__box"><span class="opt__tick" aria-hidden="true"></span>' +
+           '<span class="opt__label">' + NO_SE + '</span></span></label></fieldset>';
+    } else {
+      h += htmlOpciones(p);
+      if (p.otra) {
+        h += '<div class="other" id="otra-' + p.id + '" hidden>' +
+             '<label for="in-' + p.id + '">' + escapar(p.otra.etiqueta) + '</label>' +
+             '<input id="in-' + p.id + '" type="text" name="' + p.id + '_otra" placeholder="' + escapar(p.otra.placeholder || "") + '" autocomplete="off" enterkeyhint="done"></div>';
+      }
+      /* El campo de la tarjeta de confirmación está siempre a la vista: el texto
+         que él escriba manda sobre la conclusión, sin tener que marcar nada. */
+      if (p.textoSiempre) {
+        h += '<div class="other">' +
+             '<label for="in-' + p.id + '">' + escapar(p.textoSiempre.etiqueta) + '</label>' +
+             '<input id="in-' + p.id + '" type="text" name="' + p.id + '_otra" placeholder="' +
+             escapar(p.textoSiempre.placeholder || "") + '" autocomplete="off" enterkeyhint="done"></div>';
+      }
+      if (p.tipo === "multi") {
+        h += '<p class="q__count" id="count-' + p.id + '" aria-live="polite" hidden></p>';
+      }
+    }
+    h += '<p class="q__error" role="alert">' + escapar(mensajeError(p)) + '</p>';
+
+    sec.innerHTML = h;
+
+    /* La respuesta a la conclusión se registra en el propio elemento y en el
+       momento del clic: así no depende de que el navegador termine de entregar
+       el «change» después del toque. Es idempotente: se puede llamar dos veces. */
+    if (p.confirma) {
+      Array.prototype.forEach.call(sec.querySelectorAll("input"), function (input) {
+        input.addEventListener("change", function () {
+          var q = porId(p.id);
+          if (!q) return;
+          recoger(q);
+          sincronizarOtra(q.id);
+          guardar();
+        });
+      });
+      Array.prototype.forEach.call(sec.querySelectorAll(".opt"), function (etiqueta) {
+        etiqueta.addEventListener("click", function () {
+          var q = porId(p.id);
+          if (!q) return;
+          recoger(q);
+          guardar();
+        });
+      });
+    }
+    return sec;
+  }
+
+  function mensajeError(p) {
+    if (p.tipo === "texto") return "Escribe una línea o marca «Aún no lo sé» para poder seguir.";
+    if (p.tipo === "multi") return "Marca al menos una opción para poder seguir. Si no lo tienes claro, «Aún no lo sé» me sirve.";
+    if (p.confirma) return "Dime si lo he entendido bien, o escríbelo con tus palabras, para poder seguir.";
+    if (p.otra) return "Marca una opción para poder seguir. Si escribes en «Otra opción», añade el texto.";
+    return "Marca una opción para poder seguir. Si no lo tienes claro, «Aún no lo sé» me sirve.";
+  }
+
+  function restaurarValores(p) {
+    var sec = document.getElementById("q-" + p.id);
+    if (!sec) return;
+    var r = resp(p.id);
+    var grupo = sec.querySelectorAll('input[name="' + p.id + '"]');
+    Array.prototype.forEach.call(grupo, function (input) {
+      if (r.valores.indexOf(input.value) >= 0) input.checked = true;
+    });
+    var otra = sec.querySelector('input[name="' + p.id + '_otra"]');
+    if (otra && r.otra) otra.value = r.otra;
+    /* La conclusión que se le enseñó al llegar también se recupera en pantalla: si
+       no, al volver a pintar no habría forma de saber qué es lo que confirmó. */
+    var pintada = sec.querySelector(".q__eco--claro");
+    if (p.confirma && pintada && !r.deduccion) {
+      var textoDed = pintada.getAttribute("data-deduccion");
+      if (textoDed) r.deduccion = textoDed;
+    }
+    sincronizarOtra(p.id);
+    sincronizarContador(p.id);
+    sincronizarEco();
+    actualizarPasos();
+  }
+
+  function sincronizarOtra(id) {
+    var p = porId(id);
+    /* La tarjeta de respuesta corta no tiene «Otra opción»: su campo está
+       siempre a la vista y no depende de ninguna marca. Y la de confirmar la
+       conclusión tampoco: su campo es una respuesta más, siempre visible, y lo
+       que él escriba manda sobre lo que yo he deducido. */
+    if (!p || p.tipo === "texto" || p.textoSiempre) return;
+    var sec = document.getElementById("q-" + id);
+    if (!sec) return;
+    var caja = sec.querySelector(".other");
+    if (!caja) return;
+    var marcada = marcados(id).indexOf(OTRA) >= 0;
+    caja.hidden = !marcada;
+    if (!marcada) {
+      var input = caja.querySelector("input");
+      if (input) input.value = "";
+      var r = estado.respuestas[id];
+      if (r) r.otra = "";
+    }
+  }
+
+  function sincronizarContador(id) {
+    var p = porId(id);
+    if (!p || p.tipo !== "multi") return;
+    var contador = document.getElementById("count-" + id);
+    if (!contador) return;
+    var reales = marcados(id).filter(function (v) { return v !== NO_SE && v !== OTRA; });
+    if (!reales.length) { contador.hidden = true; contador.textContent = ""; return; }
+    contador.hidden = false;
+    contador.textContent = reales.length === 1
+      ? "1 respuesta marcada · puedes marcar más"
+      : reales.length + " respuestas marcadas";
+  }
+
+  /* La pregunta del tiempo nombra la tarea que acaba de elegir: así se ve que
+     el cuestionario va con lo que él contesta. */
+  function sincronizarEco() {
+    var eco = document.getElementById("eco-tiempo");
+    if (!eco) return;
+    var t = valorTarea();
+    if (!t || t === NO_SE || t === OTRA) { eco.hidden = true; eco.textContent = ""; return; }
+    eco.hidden = false;
+    eco.innerHTML = "Hablamos de <b>" + escapar(t) + "</b>.";
+  }
+
+  /* --- El avance son las PANTALLAS, una línea cada una ---
+     No se calcula nada a partir de respuestas contestadas ni de un total futuro:
+     se dibuja una línea por cada pantalla que ha descubierto, y se encienden
+     hasta la que está mirando.
+       · al abrir, todas apagadas (solo hay una descubierta: la primera);
+       · al avanzar una pantalla, se enciende una línea;
+       · al retroceder, se apaga una;
+       · en el resumen, todas encendidas.
+     Y el texto dice «Pantalla X de Y», con la Y real: las que ha descubierto
+     hasta ese momento, no las que podrían llegar a salir. */
+  var MAX_LINEAS = 14;
+
+  function textoAvance() {
+    if (enRevision()) return "Pantalla " + pantallasDescubiertas() + " de " + pantallasDescubiertas();
+    var x = Math.max(0, estado.pantalla) + 1;
+    var y = pantallasDescubiertas();
+    return "Pantalla " + x + " de " + y;
+  }
+
+  function actualizarPasos() {
+    var descubiertas = pantallasDescubiertas();
+    /* Al abrir, todas apagadas; al avanzar una pantalla se enciende una; al
+       retroceder se apaga una; y en el resumen, todas encendidas. */
+    var encendidas = enRevision() ? descubiertas : Math.max(0, estado.pantalla);
+
+    var lineas = Math.min(descubiertas, MAX_LINEAS);
+    var luces = descubiertas > MAX_LINEAS ? Math.round(encendidas * lineas / descubiertas) : encendidas;
+    if (luces > lineas) luces = lineas;
+    if (luces < 0) luces = 0;
+
+    pasos.setAttribute("data-total", String(lineas));
+    pasos.setAttribute("data-hechos", String(luces));
+    pasos.setAttribute("data-pantalla", String(enRevision() ? descubiertas : Math.max(0, estado.pantalla) + 1));
+    pasos.setAttribute("data-descubiertas", String(descubiertas));
+    var texto = document.getElementById("pasos-texto");
+    if (texto) texto.textContent = textoAvance();
+
+    /* Las líneas van después de la etiqueta, dentro de la misma línea. */
+    var barra = pasos.querySelector(".pasos__barra");
+    if (barra) pasos.removeChild(barra);
+    barra = document.createElement("div");
+    barra.className = "pasos__barra";
+    barra.setAttribute("aria-hidden", "true");
+    for (var i = 0; i < lineas; i++) {
+      var d = document.createElement("div");
+      d.className = "pasos__paso";
+      d.setAttribute("data-hecho", i < luces ? "1" : "0");
+      barra.appendChild(d);
+    }
+    pasos.appendChild(barra);
+  }
+
+  /* --- El hueco que deja la barra pegada ---
+     La barra de navegación va pegada abajo, así que el final del cuestionario
+     tiene que quedar por encima de ella o los botones de envío se quedarían
+     debajo, sin poder pulsarse. En vez de un número fijo (que se queda corto o
+     largo según la pantalla), se mide la barra de verdad y se reserva ese mismo
+     alto. Se vuelve a medir cuando cambia de tamaño: al aparecer o desaparecer
+     «Atrás», o al girar el móvil. */
+  function ajustarHuecoNav() {
+    var nav = document.getElementById("nav");
+    if (!nav) return;
+    var alto = Math.round(nav.getBoundingClientRect().height);
+    form.style.paddingBottom = (alto + 16) + "px";
+  }
+  if (window.ResizeObserver) {
+    try { new ResizeObserver(ajustarHuecoNav).observe(document.getElementById("nav")); } catch (e) {}
+  }
+  window.addEventListener("resize", ajustarHuecoNav);
+  window.addEventListener("orientationchange", ajustarHuecoNav);
+  window.addEventListener("load", ajustarHuecoNav);
+
+  /* --- Pintar la pantalla que tiene delante ---
+     La pantalla que se le enseña queda guardada como SU pantalla: mientras la
+     esté rellenando no se recalcula, y al volver atrás se le devuelve tal cual,
+     con lo que dejó marcado. Una pantalla nueva se añade al recorrido aquí, que
+     es cuando de verdad la descubre. */
+  function pintarPreguntas() {
+    var lista = tarjetasDeLaPantalla();
+    if (lista.length) {
+      var hueco = huecoDeLaPantalla();
+      if (!pantallaGuardada(hueco).length) {
+        estado.pantallas[hueco] = preguntasDeLaPantalla();
+      }
+    }
+    contenedor.innerHTML = "";
+    result.setAttribute("data-open", "false");
+
+    lista.forEach(function (p) {
+      contenedor.appendChild(pintarPregunta(p));
+      if (estado.preguntadas.indexOf(p.id) < 0) estado.preguntadas.push(p.id);
+      restaurarValores(p);
+    });
+
+    visibilidadBotones();
+    guardar();
+    volverArriba();
+  }
+
+  /* --- Pintar sin pisar el toque que se está procesando ---
+     Cuando él marca una opción, el navegador tiene que terminar de entregar ese
+     clic (y su «change») antes de que le cambiemos la pantalla por debajo. Si no,
+     el cambio se pierde: el elemento que lo tenía que recibir ya no está. Por eso
+     el repintado se aplaza al siguiente fotograma; mientras tanto solo cambian
+     los datos.
+     Y la decisión de qué toca pintar se toma DENTRO de ese fotograma, no antes:
+     si se decidiera al pulsar, se decidiría con la respuesta todavía a medias. */
+  var repintadoPendiente = false;
+  /* Pinta lo que toca ahora mismo: o la pantalla de preguntas, o el resumen. */
+  function pintarLoQueToca() {
+    repintadoPendiente = false;
+    /* El resumen, solo si es lo que está mirando. */
+    if (enRevision()) { mostrarRevision(); return; }
+    /* Con preguntas delante, esas son las que se pintan: las suyas, tal cual,
+       aunque al contestarlas hayan cambiado las condiciones de la siguiente. */
+    if (preguntasDeLaPantalla().length) { pintarPreguntas(); return; }
+    /* Sin preguntas delante: si venía de atrás, se le sigue devolviendo la que
+       estaba mirando; si no, la visita está cerrada y toca el resumen. */
+    if (pantallaGuardada(estado.pantalla).length) { pintarPreguntas(); return; }
+    /* Nada por preguntar: se le enseña el resumen. Si de verdad no queda nada,
+       es el cierre; y si queda algo (una conclusión sin confirmar, por ejemplo),
+       el mismo panel se enseña como lo que es —un estado a medias— y con la
+       salida para resolverlo, no como una pantalla final. */
+    mostrarRevision();
+  }
+  function pedirPintado() {
+    if (repintadoPendiente) return;
+    repintadoPendiente = true;
+    /* Se pide para el siguiente fotograma y, por si el navegador no lo sirve
+       (pestaña de fondo, por ejemplo), con un temporizador de respaldo: el
+       primero que llegue pinta, el otro se queda en nada. */
+    var siguiente = window.requestAnimationFrame || function (f) { return window.setTimeout(f, 16); };
+    siguiente(pintarLoQueToca);
+    window.setTimeout(pintarLoQueToca, 60);
+  }
+
+  /* ====================================================================
+     8. REVISIÓN
+     Tres apartados, separados a propósito: lo que ha confirmado él, lo que he
+     deducido yo (sin sellar) y lo que se queda pendiente porque no lo sabe.
+     Eso es para él, en pantalla. En el mensaje de envío solo viaja lo suyo:
+     sus respuestas nuevas, las deducciones que ha confirmado y sus incógnitas
+     declaradas. Lo que ya estaba apuntado de la reunión y lo que no se le
+     pregunta son documentación del proyecto: no se le muestran ni viajan.
+     ==================================================================== */
+  function preguntasRespondidas() {
+    return PREGUNTAS.filter(function (p) {
+      return !!estado.respuestas[p.id] && estaRespondida(p);
+    });
+  }
+
+  function textoRespuesta(p) {
+    var r = resp(p.id);
+    if (p.tipo === "texto") {
+      if (r.noSe) return NO_SE;
+      return r.otra;
+    }
+    /* La tarjeta que confirma una conclusión mía responde con lo que él ha
+       dicho: la conclusión, o lo que haya escrito con sus palabras. */
+    if (p.confirma) {
+      if (r.noSe) return NO_SE;
+      return (r.otra || "").trim();
+    }
+    var vals = r.valores.filter(function (v) { return v !== OTRA; });
+    if (r.valores.indexOf(OTRA) >= 0 && r.otra) vals.push(r.otra + " (otra opción)");
+    return vals.join(" · ");
+  }
+
+  function esNoSe(p) {
+    return p.tipo === "texto" ? resp(p.id).noSe : marcados(p.id).indexOf(NO_SE) >= 0;
+  }
+
+  /* --- ¿Está todo resuelto? ---
+     Material es todo lo que él deba cerrar: una pregunta que sigue aplicable, o
+     una conclusión mía que todavía no ha visto. Mientras quede algo de eso, la
+     visita no está lista para enviarse y el resumen no es un cierre. Un solo
+     sitio decide esto, y lo usan los botones, el resumen y la recuperación. */
+  function quedanPendientes() {
+    return preguntasAplicables().length > 0 || (!!exitoDeducido() && !deduccionResuelta());
+  }
+  function todoListo() {
+    return !quedanPendientes();
+  }
+
+  /* --- Botones de la pantalla ---
+     Un único punto decide qué se ve, con el estado delante:
+       · «Atrás» solo si hay un grupo anterior al que volver, con sus respuestas
+         guardadas. Volver atrás no borra nada.
+       · «Continuar» solo si queda algo por delante que resolver: el grupo
+         siguiente del recorrido o preguntas nuevas. Cuando ya no queda ninguna
+         pregunta aplicable, el resumen lo enseña el propio motor y este botón se
+         retira: en su lugar queda «Atrás».
+       · Los botones de ENVÍO (WhatsApp, correo, copiar) no se enseñan hasta que
+         el recorrido está cerrado de verdad: sin preguntas aplicables y sin
+         ninguna conclusión mía pendiente de su visto bueno. Si queda algo, en su
+         lugar va un botón que lo lleva justo a resolverlo. */
+  function visibilidadBotones() {
+    var quedan = preguntasAplicables().length;
+    var listo = todoListo();
+
+    btnVolver.hidden = !hayAtras();
+    var enviar = document.getElementById("send");
+    if (enviar) {
+      /* Con el resumen delante, el panel trae su propia salida para seguir: este
+         botón se retira para no tener dos sitios donde continuar. */
+      enviar.hidden = !quedan || enRevision();
+      enviar.textContent = textoContinuar();
+    }
+
+    /* El aviso de que falta algo es del resumen: fuera de él no pinta nada, y en
+       la pantalla de preguntas ya se ve lo que queda por contestar. */
+    var aviso = document.getElementById("rev-pendiente-aviso");
+    if (aviso) {
+      aviso.hidden = !enRevision() || listo;
+      if (!aviso.hidden) {
+        aviso.textContent = quedan
+          ? "Todavía no: te queda " + quedan + (quedan === 1 ? " pregunta" : " preguntas") +
+            " por contestar. El botón de enviar aparece cuando esté todo resuelto."
+          : "Todavía no: hay una conclusión mía sin confirmar. El botón de enviar aparece cuando me digas si la he entendido bien.";
+      }
+    }
+    /* Lo que es propio del cierre (el «Gracias», el mensaje final y el envío)
+       solo sale cuando no queda nada material. Y mientras quede, en su lugar hay
+       una salida directa a resolverlo. */
+    result.setAttribute("data-final", listo ? "true" : "false");
+    var seguir = document.getElementById("rev-seguir");
+    if (seguir) seguir.hidden = !enRevision() || listo;
+    /* Los tres botones de envío se deciden en un solo sitio: ni se ofrece lo que
+       todavía no está resuelto, ni se enseña un canal que no esté configurado. */
+    ["send-wa", "send-mail", "copy"].forEach(function (id) {
+      var b = document.getElementById(id);
+      if (!b) return;
+      if (id === "send-wa") b.hidden = !listo || !CONFIG.WHATSAPP;
+      else if (id === "send-mail") b.hidden = !listo || !CONFIG.EMAIL;
+      else b.hidden = !listo;
+    });
+    var cajaEnvio = document.getElementById("acciones-envio");
+    if (cajaEnvio) cajaEnvio.hidden = !listo;
+
+    /* El reinicio solo se ofrece si hay respuestas suyas que borrar: con las
+       preguntas solo pintadas no hay nada que perder. Y el aviso de guardado,
+       solo si de verdad hay algo guardado. */
+    cajaReiniciar.hidden = !preguntasRespondidas().length;
+    saved.hidden = !(estado.preguntadas.length || enRevision());
+    /* Y se vuelve a medir el hueco de la barra: acaba de cambiar de tamaño si el
+       «Atrás» ha aparecido o desaparecido. */
+    ajustarHuecoNav();
+  }
+
+  function mostrarRevision() {
+    contenedor.innerHTML = "";
+    /* El resumen no es una pantalla: no entra en `pantallas`. Y el sitio desde el
+       que «Atrás» vuelve es la última pantalla que descubrió. */
+    estado.pantalla = RESUMEN;
+    visibilidadBotones();
+
+    /* Lo que decide si esto es el cierre o solo el estado de la visita es si
+       queda algo material: lo mismo que decide el envío. El «Gracias» y el
+       mensaje final no se enseñan mientras quede algo por resolver. */
+    var listo = todoListo();
+    document.getElementById("rev-gracias").hidden = !listo;
+    document.getElementById("rev-intro").hidden = !listo;
+    document.getElementById("rev-titulo-pendiente").hidden = listo;
+    document.getElementById("rev-texto-pendiente").hidden = listo;
+
+    var confirmado = document.getElementById("rev-confirmado");
+    var deducido = document.getElementById("rev-deducido");
+    var pendiente = document.getElementById("rev-pendiente");
+    confirmado.innerHTML = ""; deducido.innerHTML = ""; pendiente.innerHTML = "";
+
+    var hayConfirmado = false, hayPendiente = false;
+
+    /* 1 · CONFIRMADO: lo que ha contestado él, tal cual, sin interpretar.
+          La tarjeta que confirma mi conclusión no se enseña como si fuera una
+          pregunta suya: lo que cuenta es el criterio de éxito que ha quedado. */
+    preguntasRespondidas().forEach(function (p) {
+      if (p.id === "exitoDeducido") return;
+      var li = document.createElement("li");
+      var destino;
+      if (esNoSe(p)) {
+        destino = pendiente;
+        hayPendiente = true;
+        li.innerHTML = "<b>" + escapar(p.corto) + "</b><em>" +
+          escapar(p.notaPendiente || ("Aún no lo sabes. Queda pendiente y lo resuelvo yo: " + (p.dueno || "Salva") + ".")) +
+          "</em>";
+      } else {
+        destino = confirmado;
+        hayConfirmado = true;
+        li.innerHTML = "<b>" + escapar(p.corto) + "</b> " + escapar(textoRespuesta(p));
+      }
+      destino.appendChild(li);
+    });
+
+    /* Si no supo responder a mi conclusión, la incógnita es suya y queda dicha,
+       con su dueño, aunque la respuesta a esa tarjeta no se conserve. */
+    var sinSaberlo = revisionDeLaDeduccion() === "no-lo-se" &&
+      (!estado.respuestas.exitoDeducido || esNoSe(porId("exitoDeducido")));
+    if (sinSaberlo) {
+      var liNoSe = document.createElement("li");
+      liNoSe.innerHTML = "<b>G. Qué te haría decir que funciona</b><em>No supiste decirlo. Queda pendiente como incógnita y lo resuelvo yo contigo, sin inventarme la respuesta.</em>";
+      pendiente.appendChild(liNoSe);
+      hayPendiente = true;
+    }
+
+    /* 2 · DEDUCIDO: conclusión mía, con su regla a la vista y SIN sellar. No
+          se mezcla con lo que él ha contestado. Si ya la ha confirmado, deja de
+          estar aquí: es suya, y sale arriba, entre lo confirmado por él. */
+    var conclusion = exitoDeducido();
+    if (conclusion && !estado.respuestas.exito && !conclusion.confirmado) {
+      var liDed = document.createElement("li");
+      liDed.className = "bloque__ded";
+      liDed.innerHTML = "<b>G. Qué te haría decir que funciona</b> " + escapar(conclusion.texto) +
+                        "<em>" + escapar(conclusion.regla) + " No me lo has dicho tú: no lo doy por bueno hasta que me lo confirmes.</em>";
+      deducido.appendChild(liDed);
+    }
+    document.getElementById("rev-deducido-vacio").hidden = !!deducido.children.length;
+
+    if (!hayConfirmado) {
+      confirmado.innerHTML = '<li class="bloque__vacio">Todavía no me has contestado nada.</li>';
+    }
+    document.getElementById("rev-pendiente-vacio").hidden = hayPendiente;
+
+    /* 3 · El estado del briefing, sin adornos: cerrado solo si no queda nada
+          material que él deba confirmar. */
+    var estadoB = estadoBriefing();
+    var cajaEstado = document.getElementById("rev-estado");
+    cajaEstado.textContent = estadoB.aviso;
+    cajaEstado.setAttribute("data-cerrado", estadoB.cerrado ? "1" : "0");
+
+    /* El mensaje no se enseña en pantalla: se construye al enviar o al copiar,
+       con `construirMensaje()`. La costura de prueba permite leerlo sin DOM. */
+    result.setAttribute("data-open", "true");
+    actualizarPasos();
+    guardar();
+    volverArriba();
+  }
+
+  /* ====================================================================
+     9. EL MENSAJE QUE ME LLEGA
+     Un mensaje CORTO: solo el cuestionario. Cinco cosas, y nada más:
+
+       1. Identificación del cuestionario, el cliente y la fecha.
+       2. Todas las respuestas nuevas, sin perder ninguna.
+       3. Las deducciones que él ha confirmado expresamente (si las hay).
+       4. Las incógnitas que él ha declarado (si las hay).
+       5. El estado: cuestionario completado.
+
+     Lo que NO viaja: la reproducción de la reunión y el apartado «Lo que no
+     te pregunto». Esa información se conserva en la documentación del
+     proyecto (CONOCIDO y NO_PREGUNTO siguen aquí, enteros), pero no tiene
+     por qué ir por WhatsApp.
+
+     Y nada viaja dos veces: si una deducción confirmada ya está entre sus
+     respuestas con las mismas palabras (el caso de la tarjeta G, que es la
+     respuesta que él mismo escribió), no se repite más abajo. El apartado de
+     deducciones solo añade lo que sus respuestas no dicen ya.
+
+     Y no se mezcla una cosa con otra: una deducción sin confirmar no viaja
+     como suya, porque no lo es; y completar el cuestionario no es cerrar el
+     proyecto.
+     ==================================================================== */
+
+  /* Las respuestas nuevas: lo que él ha contestado, sin contar la tarjeta de
+     confirmación (que no es una pregunta suya) ni lo que no supo contestar,
+     que tiene su propio apartado. */
+  function respuestasNuevas() {
+    return preguntasRespondidas().filter(function (p) {
+      return !p.extra && !esNoSe(p);
+    });
+  }
+
+  /* ¿Ese texto ya viaja entre sus respuestas nuevas? Sirve para no repetir en
+     el mensaje lo que él ya ha dicho: la comparación es de texto, sin espacios
+     de más y sin distinguir mayúsculas. */
+  function yaVaEnLasRespuestas(texto) {
+    var buscado = String(texto || "").trim().replace(/\s+/g, " ").toLowerCase();
+    if (!buscado) return false;
+    var nuevas = respuestasNuevas();
+    for (var i = 0; i < nuevas.length; i++) {
+      var dicho = String(textoRespuesta(nuevas[i]) || "").trim().replace(/\s+/g, " ").toLowerCase();
+      if (dicho && dicho === buscado) return true;
+    }
+    return false;
+  }
+
+  /* Las incógnitas que ha declarado: las que no supo contestar. La de la
+     tarjeta de confirmación se nombra por su nombre corto aunque su respuesta
+     no se conserve. */
+  function incognitasDeclaradas() {
+    var lista = [];
+    preguntasRespondidas().forEach(function (p) {
+      if (!esNoSe(p)) return;
+      if (p.id === "exitoDeducido") return;
+      lista.push(p.corto + " → lo resuelve: " + (p.dueno || "Salva"));
+    });
+    var sinSaberlo = revisionDeLaDeduccion() === "no-lo-se" &&
+      (!estado.respuestas.exitoDeducido || esNoSe(porId("exitoDeducido")));
+    if (sinSaberlo) {
+      lista.push(M_CORTO_EXITO + " → lo resuelve: Salva, contigo");
+    }
+    return lista;
+  }
+
+  /* El estado, sin adornos: el cuestionario está completado. Sin explicaciones
+     sobre requisitos ni decisiones técnicas: eso no viaja en el mensaje. */
+  function textoEstadoMensaje() {
+    return "Cuestionario completado.";
+  }
+
+  function construirMensaje() {
+    var lineas = [];
+
+    /* 1 · Qué cuestionario es, de quién y de qué día. */
+    lineas.push("CUESTIONARIO · ESPECTÁCULOS LA FIESTA");
+    lineas.push("Respuestas de Pedro · " + fechaHoy());
+    lineas.push("");
+
+    /* 2 · Todas las respuestas nuevas, tal cual, sin interpretar. */
+    var nuevas = respuestasNuevas();
+    lineas.push("== RESPUESTAS NUEVAS ==");
+    if (nuevas.length) {
+      nuevas.forEach(function (p) {
+        lineas.push("- " + p.corto + ": " + textoRespuesta(p));
+      });
+    } else {
+      lineas.push("(ninguna todavía)");
+    }
+
+    /* 3 · Solo las deducciones que él ha confirmado, y solo si no están ya
+          entre sus respuestas: lo mismo no viaja dos veces. Si no añade nada,
+          el apartado no aparece. */
+    var conclusion = exitoDeducido();
+    if (conclusion && conclusion.confirmado && !yaVaEnLasRespuestas(conclusion.texto)) {
+      lineas.push("");
+      lineas.push("== DEDUCCIONES QUE HAS CONFIRMADO TÚ ==");
+      lineas.push("- " + M_CORTO_EXITO + ": " + conclusion.texto);
+    }
+
+    /* 4 · Las incógnitas que él ha declarado. Si no ha declarado ninguna,
+          este apartado tampoco viaja. */
+    var incognitas = incognitasDeclaradas();
+    if (incognitas.length) {
+      lineas.push("");
+      lineas.push("== INCÓGNITAS QUE HAS DECLARADO ==");
+      incognitas.forEach(function (t) { lineas.push("- " + t); });
+    }
+
+    /* 5 · El estado: el cuestionario está completado. Y nada más: no se
+          explican requisitos ni decisiones técnicas del proyecto. */
+    lineas.push("");
+    lineas.push("== CUESTIONARIO COMPLETADO ==");
+    lineas.push(textoEstadoMensaje());
+
+    if (CONFIG.FIRMA) { lineas.push(""); lineas.push("— " + CONFIG.FIRMA); }
+    return lineas.join("\n");
+  }
+
+  function fechaHoy() {
+    try {
+      return new Date().toLocaleDateString("es-ES", { day: "2-digit", month: "long", year: "numeric" });
+    } catch (e) { return ""; }
+  }
+
+  function urlWhatsApp() {
+    return "https://wa.me/" + CONFIG.WHATSAPP + "?text=" + encodeURIComponent(construirMensaje());
+  }
+  function urlCorreo() {
+    return "mailto:" + CONFIG.EMAIL +
+      "?subject=" + encodeURIComponent("Cuestionario · Espectáculos La Fiesta") +
+      "&body=" + encodeURIComponent(construirMensaje());
+  }
+
+  /* ====================================================================
+     10. GUARDAR Y RECUPERAR
+     Si se interrumpe, vuelve con el mismo enlace y sigue donde lo dejó.
+     ==================================================================== */
+  /* ====================================================================
+      10 BIS. EMPEZAR DE NUEVO
+     Borra lo guardado en este dispositivo y vuelve al principio. Pide
+     confirmación antes: es lo único que no se puede deshacer.
+     La caja y sus botones ya están resueltos arriba, con el resto del estado.
+     ==================================================================== */
+  function guardar() {
+    try {
+      estado.v = STORAGE_VERSION;
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+      saved.hidden = !(estado.preguntadas.length || enRevision());
+      /* El reinicio solo se ofrece si hay respuestas suyas que borrar: con las
+         preguntas solo pintadas no hay nada que perder. */
+      cajaReiniciar.hidden = !preguntasRespondidas().length;
+    } catch (e) { /* modo privado: se sigue sin guardar */ }
+  }
+
+  function preguntarReinicio() {
+    var cuantas = preguntasRespondidas().length;
+    document.getElementById("reiniciar-preg").textContent =
+      cuantas === 1
+        ? "¿Borro tu respuesta guardada y empezamos de cero?"
+        : "¿Borro tus " + cuantas + " respuestas guardadas y empezamos de cero?";
+    btnAbrirReiniciar.hidden = true;
+    cajaConf.hidden = false;
+    btnSiReiniciar.focus({ preventScroll: true });
+  }
+  function cancelarReinicio() {
+    cajaConf.hidden = true;
+    btnAbrirReiniciar.hidden = false;
+    btnAbrirReiniciar.focus({ preventScroll: true });
+  }
+  /* Deja el cuestionario como recién abierto: sin respuestas, sin nada
+     guardado en este dispositivo y por la primera pantalla. */
+  function empezarDeNuevo() {
+    try { window.localStorage.removeItem(STORAGE_KEY); } catch (e) { /* modo privado */ }
+    estado.respuestas = {};
+    estado.confirmacion = "";
+    estado.conclusion = "";
+    estado.exitoConfirmado = false;
+    estado.preguntadas = [];
+    estado.pantallas = [];
+    estado.pantalla = ANTES;
+    avisoRecuperado.hidden = true;
+    avisoRecuperado.innerHTML = "";
+    saved.hidden = true;
+    cancelarReinicio();
+    cajaReiniciar.hidden = true;
+    pintarPreguntas();
+    showToast("Empezamos de cero");
+  }
+
+  btnAbrirReiniciar.addEventListener("click", preguntarReinicio);
+  btnSiReiniciar.addEventListener("click", empezarDeNuevo);
+  btnNoReiniciar.addEventListener("click", cancelarReinicio);
+
+  function recuperar() {
+    var raw;
+    try { raw = window.localStorage.getItem(STORAGE_KEY); } catch (e) { return false; }
+    if (!raw) return false;
+    var data;
+    try { data = JSON.parse(raw); } catch (e) { return false; }
+    if (!data || data.v !== STORAGE_VERSION || !data.respuestas) return false;
+
+    estado.respuestas = data.respuestas;
+    estado.confirmacion = data.confirmacion || "";
+    estado.conclusion = data.conclusion || "";
+    estado.exitoConfirmado = !!data.exitoConfirmado;
+    estado.preguntadas = data.preguntadas || [];
+    /* El recorrido, con los nombres de ahora (`pantallas`/`pantalla`) y también
+       con los de antes (`ruta`/`paso`, `revision`, `terminado`, `volviendo`), para
+       no perderle el sitio a una visita empezada con una versión anterior. */
+    var eraResumen = !!data.revision || data.paso === RESUMEN || !!data.terminado;
+    var guardadas = data.pantallas || data.ruta || [];
+    estado.pantallas = guardadas.filter(function (g) { return g && g.length; });
+    if (typeof data.pantalla === "number") {
+      estado.pantalla = data.pantalla;
+    } else if (typeof data.paso === "number") {
+      /* El `paso` de antes contaba desde el principio (el 0 era la primera
+         pantalla); el de ahora cuenta desde ANTES. */
+      estado.pantalla = data.paso === RESUMEN ? RESUMEN : data.paso - 1;
+      if (estado.pantalla < ANTES) estado.pantalla = ANTES;
+    } else {
+      estado.pantalla = ANTES;
+    }
+
+    depurarRespuestas();
+
+    /* Si el recorrido no venía guardado (una visita que empezó con la versión
+       que solo guardaba la memoria de lo preguntado), se reconstruye troceando
+       esa memoria igual que se le enseñó: así vuelve al sitio donde lo dejó, y no
+       a la primera pantalla. */
+    if (!estado.pantallas.length && estado.preguntadas.length) {
+      var contestadas = PREGUNTAS
+        .filter(function (p) { return estado.preguntadas.indexOf(p.id) >= 0 && estaRespondida(p); })
+        .map(function (p) { return p.id; });
+      for (var i = 0; i < contestadas.length; i += TAMANO_PANTALLA) {
+        estado.pantallas.push(contestadas.slice(i, i + TAMANO_PANTALLA));
+      }
+      estado.pantalla = estado.pantallas.length;
+    }
+    /* Al volver se le deja en la última pantalla descubierta: lo que le queda por
+       contestar. Y si lo que venía guardado apuntaba a una que ya no está,
+       también. */
+    if (!eraResumen) estado.pantalla = estado.pantallas.length;
+    if (estado.pantalla < ANTES || estado.pantalla > estado.pantallas.length) {
+      estado.pantalla = estado.pantallas.length;
+    }
+    /* Y si ya no le queda nada por contestar, el resumen. */
+    if (!preguntasAplicables().length && estado.pantalla >= estado.pantallas.length) {
+      estado.pantalla = RESUMEN;
+    } else if (eraResumen && estado.pantalla >= estado.pantallas.length) {
+      estado.pantalla = RESUMEN;
+    }
+
+    var algo = estado.preguntadas.length > 0;
+    if (algo) {
+      /* Al volver, lo que ya está respondido no se le vuelve a preguntar, pero
+         tampoco desaparece sin más: se le enseña, para que vea de dónde sigue. */
+      var recuperadas = preguntasRespondidas();
+      var lista = recuperadas.map(function (p) {
+        var valor = esNoSe(p) ? "aún no lo sabes" : textoRespuesta(p);
+        return "<li><b>" + escapar(p.corto) + "</b> " + escapar(valor) + "</li>";
+      }).join("");
+      avisoRecuperado.hidden = false;
+      avisoRecuperado.innerHTML =
+        "<div><b>" + (enRevision()
+          ? "He recuperado lo que llevabas respondido. Puedes revisarlo y mandármelo cuando quieras."
+          : "He recuperado lo que llevabas respondido. Sigues donde lo dejaste.") + "</b>" +
+        (lista ? '<ul class="aviso__lista">' + lista + "</ul>" : "") + "</div>";
+      saved.hidden = false;
+    }
+    return algo;
+  }
+
+  /* ====================================================================
+     11. INTERACCIÓN
+     ==================================================================== */
   function showToast(text) {
     toast.textContent = text;
     toast.setAttribute("data-show", "true");
@@ -542,210 +2474,256 @@ var CONFIG = {
     showToast._t = window.setTimeout(function () { toast.removeAttribute("data-show"); }, 3200);
   }
 
-  function pick(name) {
-    return Array.prototype.slice.call(form.querySelectorAll('input[name="' + name + '"]:checked'));
+  /* En las preguntas de varias respuestas, «Aún no lo sé» y «Otra opción» no
+     conviven con las demás: marcar una suelta las otras, y al revés. Así el
+     dato que me llega nunca se contradice a sí mismo. */
+  function sincronizarExclusividad(target) {
+    if (!target || !target.name) return;
+    var grupo = Array.prototype.slice.call(form.querySelectorAll('input[name="' + target.name + '"]'));
+    if (grupo.length < 2 || grupo[0].type !== "checkbox") return;
+
+    var esSuave = target.hasAttribute("data-exclusive-soft");
+    var esOtra = target.hasAttribute("data-other");
+    var esNormal = !esSuave && !esOtra;
+
+    grupo.forEach(function (input) {
+      if (input === target || !input.checked) return;
+      var suave = input.hasAttribute("data-exclusive-soft");
+      var otra = input.hasAttribute("data-other");
+      if ((esSuave || esOtra) && !suave && !otra) input.checked = false;
+      else if (esNormal && (suave || otra)) input.checked = false;
+      else if (esSuave && otra) input.checked = false;
+      else if (esOtra && suave) input.checked = false;
+    });
   }
 
-  /* ---------- Cuántas llevas marcadas en la pregunta de varias respuestas ----
-     Solo cuenta las respuestas de verdad: «Aún no lo sé» y «Otra opción» no son
-     «una más», son las salidas. Así el número no engaña a nadie. */
-  function syncCount() {
-    var contador = document.getElementById("q3-count");
-    if (!contador) return;
-    var reales = pick("q3").filter(function (i) {
-      return !i.hasAttribute("data-exclusive-soft") && !i.hasAttribute("data-other");
-    });
-    if (reales.length === 0) {
-      contador.hidden = true;
-      contador.textContent = "";
+  function recoger(p) {
+    var sec = document.getElementById("q-" + p.id);
+    if (!sec) return;
+    var r = respEditable(p.id);
+    var antes = r.valores.slice();
+    r.valores = [];
+    var grupo = sec.querySelectorAll('input[name="' + p.id + '"]:checked');
+    Array.prototype.forEach.call(grupo, function (i) { r.valores.push(i.value); });
+    /* La respuesta a la conclusión no se pierde por un repintado: si en pantalla
+       no hay ninguna opción marcada pero él ya la había contestado, se conserva.
+       Cambiarla es marcar otra opción, y eso sí entra por aquí. */
+    if (p.confirma && !r.valores.length && antes.length) r.valores = antes;
+    r.noSe = r.valores.indexOf(NO_SE) >= 0;
+    var otra = sec.querySelector('input[name="' + p.id + '_otra"]');
+    r.otra = otra ? otra.value : "";
+    if (p.tipo === "texto" && r.valores.indexOf(NO_SE) < 0 && !r.otra.trim()) r.otra = "";
+    /* Cuando contesta él mismo su criterio de éxito, esa respuesta manda: se
+       olvida lo que hubiera decidido antes en la tarjeta de confirmar. Si no,
+       un «Aún no lo sé» de esa tarjeta dejaba sin efecto su respuesta de ahora. */
+    if (p.id === "exito") estado.confirmacion = "";
+    if (p.confirma) registrarConfirmacion();
+  }
+
+  /* --- La respuesta a la conclusión mía ---
+     «Sí, es justo eso» → queda registrada como SUYA y confirmada por el cliente.
+     «No, lo corrijo yo» → no se sella nada: se le pregunta a él (tarjeta G).
+     «Aún no lo sé»      → incógnita declarada, con su dueño, para Salva.
+     Y el texto que escriba, si escribe algo, manda sobre la conclusión. */
+  function registrarConfirmacion() {
+    var revision = revisionDeLaDeduccion();
+    var r = estado.respuestas.exitoDeducido;
+    var escritoAhora = r ? (r.otra || "").trim() : "";
+    /* Nada marcado, nada escrito y nada decidido: no hay nada que registrar. */
+    if (revision === "pendiente" && !estado.confirmacion && !escritoAhora) return;
+    var conclusion = (r && r.deduccion) || estado.conclusion || "";
+    if (!conclusion) {
+      var deduccion = deduccionExito();
+      conclusion = deduccion ? deduccion.texto : "";
+    }
+    estado.conclusion = conclusion;
+
+    if (estado.confirmacion === "si") {
+      /* Ya está decidido que es suyo: si el criterio se hubiera quedado sin
+         registrar, se registra aquí otra vez. Nunca se pierde. */
+      if (!estado.respuestas.exito && conclusion) {
+        estado.respuestas.exito = { valores: [conclusion], otra: conclusion, noSe: false };
+        estado.exitoConfirmado = true;
+      }
       return;
     }
-    contador.hidden = false;
-    contador.textContent = reales.length === 1
-      ? "1 respuesta marcada · puedes marcar más"
-      : reales.length + " respuestas marcadas";
-  }
-
-  function otherInputFor(name) {
-    return form.querySelector('input[name="' + name + '_otra"]');
-  }
-
-  function syncOther(name) {
-    var other = otherInputFor(name);
-    if (!other) return;
-    var box = other.closest(".other");
-    var checked = pick(name).some(function (i) { return i.getAttribute("data-other") === "1"; });
-    box.hidden = !checked;
-    if (checked) other.focus({ preventScroll: true });
-    else other.value = "";
-  }
-
-  /* En la pregunta 3 se pueden marcar varias respuestas, pero «Aún no lo sé» y
-     «Otra opción» no conviven con ellas: marcar una suelta las otras, y al
-     revés. Así el dato que me llega nunca se contradice a sí mismo. */
-  function syncExclusive(target) {
-    if (!target || !target.name) return;
-    var group = Array.prototype.slice.call(form.querySelectorAll('input[name="' + target.name + '"]'));
-    if (group.length < 2 || group[0].type !== "checkbox") return;
-
-    var isSoft = target.hasAttribute("data-exclusive-soft");
-    var isOther = target.hasAttribute("data-other");
-    var isPlain = !isSoft && !isOther;
-
-    group.forEach(function (input) {
-      if (input === target || !input.checked) return;
-      var soft = input.hasAttribute("data-exclusive-soft");
-      var other = input.hasAttribute("data-other");
-      if ((isSoft || isOther) && !soft && !other) input.checked = false;
-      else if (isPlain && (soft || other)) input.checked = false;
-      else if (isSoft && other) input.checked = false;
-      else if (isOther && soft) input.checked = false;
-    });
-  }
-
-  function clearPending(q) {
-    var section = document.getElementById("q" + q.id + "-wrap");
-    var chosen = pick(q.name);
-    var other = otherInputFor(q.name);
-    var needsText = chosen.some(function (i) { return i.getAttribute("data-other") === "1"; });
-    var hasText = other && other.value.trim().length > 0;
-    if (chosen.length > 0 && (!needsText || hasText)) section.classList.remove("q--invalid");
-  }
-
-  function validate() {
-    var firstBad = null;
-    QUESTIONS.forEach(function (q) {
-      var section = document.getElementById("q" + q.id + "-wrap");
-      var chosen = pick(q.name);
-      var other = otherInputFor(q.name);
-      var needsText = chosen.some(function (i) { return i.getAttribute("data-other") === "1"; });
-      var hasText = other && other.value.trim().length > 0;
-      var ok = chosen.length > 0 && (!needsText || hasText);
-      section.classList.toggle("q--invalid", !ok);
-      if (!ok && !firstBad) firstBad = section;
-    });
-    return firstBad;
-  }
-
-  /* ---------- El mensaje que me llega ---------- */
-  function buildSummary() {
-    var lines = ["Tres cosas que confirmar · Espectáculos La Fiesta", ""];
-    QUESTIONS.forEach(function (q) {
-      var chosen = pick(q.name).map(function (i) { return i.value; });
-      var other = otherInputFor(q.name);
-      var value = chosen.filter(function (v) { return v !== "__otra__"; });
-      if (chosen.indexOf("__otra__") >= 0 && other && other.value.trim()) {
-        value.push(other.value.trim() + " (otra opción)");
+    if (revision === "no-lo-se") {
+      /* No sabe responder: incógnita declarada, para que la resuelva Salva. */
+      estado.confirmacion = "no-lo-se";
+      estado.exitoConfirmado = false;
+      if (r) r.noSe = true;
+      var escrito = r ? (r.otra || "").trim() : "";
+      if (escrito) {
+        estado.respuestas.exito = { valores: [escrito], otra: escrito, noSe: false };
+        estado.exitoConfirmado = true;
+      } else {
+        delete estado.respuestas.exito;
       }
-      lines.push(q.id + ". " + q.title);
-      lines.push("   " + (value.length ? value.join(" · ") : "(sin responder)"));
-      lines.push("");
-    });
-    if (CONFIG.FIRMA) lines.push("— " + CONFIG.FIRMA);
-    return lines.join("\n");
-  }
+      return;
+    }
 
-  function inputByValue(name, value) {
-    var group = form.querySelectorAll('input[name="' + name + '"]');
-    for (var i = 0; i < group.length; i++) if (group[i].value === value) return group[i];
-    return null;
-  }
+    var suyo = escritoAhora;
+    if ((revision === "si" || suyo) && (conclusion || suyo)) {
+      /* Lo ha confirmado (o lo ha escrito él): queda registrado como suyo. */
+      suyo = suyo || conclusion;
+      estado.confirmacion = "si";
+      estado.respuestas.exito = { valores: [suyo], otra: suyo, noSe: false };
+      estado.exitoConfirmado = true;
+      return;
+    }
 
-  function saveState() {
-    try {
-      var data = { v: STORAGE_VERSION };
-      QUESTIONS.forEach(function (q) {
-        data[q.name] = pick(q.name).map(function (i) { return i.value; });
-        var other = otherInputFor(q.name);
-        data[q.name + "_otra"] = other ? other.value : "";
-      });
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      saved.hidden = false;
-    } catch (e) { /* modo privado: seguimos sin guardar */ }
-  }
-
-  function restoreState() {
-    var raw;
-    try { raw = window.localStorage.getItem(STORAGE_KEY); } catch (e) { return; }
-    if (!raw) return;
-    var data;
-    try { data = JSON.parse(raw); } catch (e) { return; }
-    if (!data || data.v !== STORAGE_VERSION) return;
-    var algo = false;
-    QUESTIONS.forEach(function (q) {
-      (data[q.name] || []).forEach(function (value) {
-        var input = inputByValue(q.name, value);
-        if (input) { input.checked = true; algo = true; }
-      });
-      /* Al recuperar hay que volver a aplicar la exclusividad: si en el guardado
-         quedaron una respuesta real y «Aún no lo sé» a la vez (porque se pulsó
-         una después de la otra), restaurarlas tal cual dejaría el dato
-         contradiciéndose a sí mismo. Se vuelve a pasar la regla. */
-      Array.prototype.slice.call(form.querySelectorAll('input[name="' + q.name + '"]:checked'))
-        .forEach(function (input) { syncExclusive(input); });
-      var other = otherInputFor(q.name);
-      if (other && data[q.name + "_otra"]) { other.value = data[q.name + "_otra"]; algo = true; }
-      syncOther(q.name);
-    });
-    if (algo) saved.hidden = false;
+    if (revision === "no") {
+      /* No está de acuerdo: no se sella nada, y se le pregunta a él. */
+      estado.confirmacion = "no";
+      estado.exitoConfirmado = false;
+      delete estado.respuestas.exito;
+    }
   }
 
   form.addEventListener("change", function (event) {
-    var target = event.target;
-    if (!target.name) return;
-    syncExclusive(target);
-    if (["q1", "q2", "q3"].indexOf(target.name) >= 0) syncOther(target.name);
-    syncCount();
-    var section = target.closest(".q");
-    if (section) section.classList.remove("q--invalid");
-    saveState();
+    var input = event.target;
+    if (!input.name) return;
+    var p = porId(input.name);
+    if (p) {
+      sincronizarExclusividad(input);
+      recoger(p);
+      sincronizarOtra(p.id);
+      sincronizarContador(p.id);
+      sincronizarEco();
+      var sec = document.getElementById("q-" + p.id);
+      if (sec) sec.classList.remove("q--invalid");
+      guardar();
+      return;
+    }
+    if (/_otra$/.test(input.name)) {
+      var id = input.name.replace(/_otra$/, "");
+      var q = porId(id);
+      if (q) {
+        respEditable(id).otra = input.value;
+        var s = document.getElementById("q-" + id);
+        if (s && input.value.trim()) s.classList.remove("q--invalid");
+        guardar();
+      }
+    }
   });
 
   form.addEventListener("input", function (event) {
-    if ((event.target.name || "").indexOf("_otra") < 0) return;
-    var q = QUESTIONS.find(function (item) { return otherInputFor(item.name) === event.target; });
-    if (q) clearPending(q);
-    saveState();
+    var input = event.target;
+    if (!/_otra$/.test(input.name || "")) return;
+    var id = input.name.replace(/_otra$/, "");
+    if (!porId(id)) return;
+    respEditable(id).otra = input.value;
+    var sec = document.getElementById("q-" + id);
+    if (sec && input.value.trim()) sec.classList.remove("q--invalid");
+    guardar();
   });
+
+  /* Se validan las tarjetas que tiene delante, y solo esas: las de su pantalla. */
+  function validarPantalla() {
+    var primeroMalo = null;
+    tarjetasDeLaPantalla().forEach(function (p) {
+      var sec = document.getElementById("q-" + p.id);
+      if (!sec) return;
+      recoger(p);
+      var ok = estaRespondida(p);
+      sec.classList.toggle("q--invalid", !ok);
+      if (!ok && !primeroMalo) primeroMalo = sec;
+    });
+    return primeroMalo;
+  }
+
+  /* --- ¿La pantalla que tiene delante es la que le toca ahora? ---
+     Al contestarla se pasa a la siguiente, y lo que venía después se recalcula. Si
+     el repintado todavía no ha llegado, en pantalla siguen las tarjetas viejas:
+     confirmar esas sería confirmar una pantalla que ya no es la suya. En ese caso
+     no se confirma nada y se pinta lo que toca de verdad. */
+  function laPantallaSigueVigente() {
+    if (enRevision()) return true;
+    var enPantalla = Array.prototype.slice.call(contenedor.children).map(function (s) {
+      return s.getAttribute("data-pregunta");
+    });
+    var leToca = preguntasDeLaPantalla();
+    if (!enPantalla.length || !leToca.length) return enPantalla.length === leToca.length;
+    return enPantalla.join("|") === leToca.join("|");
+  }
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
-    var firstBad = validate();
-    if (firstBad) {
-      firstBad.scrollIntoView({ behavior: "smooth", block: "center" });
-      var focusable = firstBad.querySelector("input");
-      if (focusable) focusable.focus({ preventScroll: true });
+    if (!laPantallaSigueVigente()) { pedirPintado(); return; }
+    var malo = validarPantalla();
+    if (malo) {
+      malo.scrollIntoView({ behavior: "smooth", block: "center" });
+      var foco = malo.querySelector("input");
+      if (foco) foco.focus({ preventScroll: true });
       showToast("Me falta una respuesta para poder seguir");
       return;
     }
-    summary.textContent = buildSummary();
-    result.setAttribute("data-open", "true");
-    document.getElementById("send-wa").hidden = !CONFIG.WHATSAPP;
-    document.getElementById("send-mail").hidden = !CONFIG.EMAIL;
-    result.scrollIntoView({ behavior: "smooth", block: "start" });
-    showToast("Todo contestado. Elige cómo mandármelo");
+    /* Lo que acaba de contestar es suyo: se guarda como la pantalla que ya vio,
+       para poder devolvérsela igual si vuelve atrás. Lo que dejó de encajar por un
+       cambio de atrás se cae antes de decidir nada, para no guardar ni pintar
+       nada que ya no valga. */
+    var pantalla = preguntasDeLaPantalla();
+    depurarRespuestas();
+    /* El recorrido se corta en esta pantalla y se reescribe con lo que acaba de
+       ver: si el cambio de una respuesta invalida pantallas posteriores, dejan de
+       estar ahí; y lo que siga valiendo se vuelve a descubrir tal cual. */
+    if (pantalla.length) {
+      var sitio = huecoDeLaPantalla();
+      estado.pantallas = (estado.pantallas || []).slice(0, sitio);
+      estado.pantallas[sitio] = pantalla;
+    }
+    /* Y sigue por donde toca: la pantalla que le queda, o el resumen si ya no le
+       queda ninguna. */
+    estado.pantalla = pantallaTrasContestar();
+    guardar();
+    /* Se pide el repintado y él decide, con los datos ya completos, si toca la
+       pantalla siguiente o el resumen final. */
+    pedirPintado();
+  });
+
+  btnVolver.addEventListener("click", function () {
+    /* Atrás no borra nada: devuelve la pantalla anterior con lo que él dejó
+       marcado. Lo sube el propio pintado. */
+    navegar(-1);
+  });
+
+  /* La salida del resumen cuando todavía falta algo: lleva justo a resolverlo.
+     Si lo que falta es confirmar mi conclusión, va a esa tarjeta; y si es una
+     pregunta, a la pantalla que la trae. */
+  document.getElementById("rev-seguir").addEventListener("click", function () {
+    var quedan = preguntasAplicables().length;
+    if (quedan) {
+      /* A la última pantalla descubierta, que es la que trae lo que queda. */
+      estado.pantalla = (estado.pantallas || []).length;
+      if (!preguntasDeLaPantalla().length) {
+        /* La calculada está vacía: se recorre lo que ya vio para devolverle la
+           tarjeta que quedó sin cerrar. */
+        for (var puntero = (estado.pantallas || []).length - 1; puntero >= ANTES; puntero--) {
+          estado.pantalla = puntero;
+          if (preguntasDeLaPantalla().length) break;
+        }
+      }
+      guardar();
+      pintarLoQueToca();
+      return;
+    }
+    /* Sin preguntas aplicables: lo que falta es ver y cerrar mi conclusión. */
+    navegar(-1);
   });
 
   document.getElementById("send-wa").addEventListener("click", function () {
-    var url = "https://wa.me/" + CONFIG.WHATSAPP + "?text=" + encodeURIComponent(buildSummary());
-    window.open(url, "_blank", "noopener");
+    window.open(urlWhatsApp(), "_blank", "noopener");
   });
-
   document.getElementById("send-mail").addEventListener("click", function () {
-    var asunto = "Tres cosas que confirmar · Espectáculos La Fiesta";
-    window.location.href = "mailto:" + CONFIG.EMAIL +
-      "?subject=" + encodeURIComponent(asunto) +
-      "&body=" + encodeURIComponent(buildSummary());
+    window.location.href = urlCorreo();
   });
-
   document.getElementById("copy").addEventListener("click", function () {
-    var texto = buildSummary();
+    var texto = construirMensaje();
     var listo = function () { showToast("Respuestas copiadas"); };
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(texto).then(listo, function () { copiaManual(texto, listo); });
     } else { copiaManual(texto, listo); }
   });
-
   function copiaManual(texto, listo) {
     var area = document.createElement("textarea");
     area.value = texto;
@@ -759,10 +2737,134 @@ var CONFIG = {
     document.body.removeChild(area);
   }
 
-  restoreState();
-  syncCount();
-  document.getElementById("send-wa").hidden = !CONFIG.WHATSAPP;
-  document.getElementById("send-mail").hidden = !CONFIG.EMAIL;
+  /* ---------- Isotipo: el original, encuadrado con CSS. Si el archivo local
+       no está, se carga el de la web; y si tampoco, queda el nombre, que ya es
+       texto de verdad y no depende de ninguna imagen. ---------- */
+  (function logo() {
+    var img = document.getElementById("logo");
+    if (!img) return;
+    img.addEventListener("error", function () {
+      var remoto = img.getAttribute("data-remoto");
+      var src = img.getAttribute("src") || "";
+      if (remoto && src !== remoto) { img.setAttribute("src", remoto); return; }
+      img.style.display = "none";
+    });
+  })();
+
+  /* ---------- Lo que ya me contaste: solo lo principal, y plegado ----------
+     Se pintan únicamente los hechos que llevan versión breve. Los doce
+     completos no se tocan: son los que van en el mensaje. */
+  (function pintarConocido() {
+    var lista = document.getElementById("lista-conocido");
+    if (!lista) return;
+    CONOCIDO.forEach(function (c) {
+      if (!c.breve) return;
+      var li = document.createElement("li");
+      li.textContent = c.breve;
+      lista.appendChild(li);
+    });
+  })();
+
+  /* ---------- Arranque ----------
+     Se pinta el sitio exacto donde lo dejó: el grupo de preguntas que tenía
+     delante, o el resumen si ya no le quedaba nada. */
+  recuperar();
+  pintarLoQueToca();
+
+  /* ====================================================================
+     12. COSTURA DE PRUEBA (no envía nada ni guarda nada nuevo)
+     Deja ver cómo se construye el mensaje y los enlaces, y qué preguntas
+     quedan por delante. La usa la prueba de navegador real; no expone
+     ningún dato que no esté ya en la propia página.
+     ==================================================================== */
+  window.__automat = {
+    version: STORAGE_VERSION,
+    mensaje: construirMensaje,
+    /* ¿Ese texto ya viaja entre sus respuestas? Lo usa la prueba para comprobar
+       que nada se repite en el mensaje. */
+    yaVaEnLasRespuestas: yaVaEnLasRespuestas,
+    whatsapp: urlWhatsApp,
+    correo: urlCorreo,
+    estado: function () { return JSON.parse(JSON.stringify(estado)); },
+    aplicables: function () { return preguntasAplicables().map(function (p) { return p.id; }); },
+    preguntadas: function () { return estado.preguntadas.slice(); },
+    parada: function () { return preguntasAplicables().length === 0; },
+    /* Lo que hay pintado ahora mismo: la pantalla que tiene delante. */
+    enRonda: function () { return preguntasDeLaPantalla(); },
+    /* En qué pantalla está y cuántas ha descubierto. `pantalla` es el índice (0
+       es la primera) o "resumen"; `descubiertas` es la Y que se le enseña. */
+    pantallaActual: function () {
+      return { pantalla: enRevision() ? "resumen" : Math.max(0, estado.pantalla) + 1,
+               descubiertas: pantallasDescubiertas(),
+               texto: textoAvance() };
+    },
+    exitoDeducido: function () { return exitoDeducido(); },
+    /* Cómo ha quedado la comprobación de la conclusión: pendiente, si, no o
+       no-lo-se, y si el criterio de éxito está confirmado por él. */
+    confirmacion: function () {
+      return { revision: revisionDeLaDeduccion(), exitoConfirmado: !!estado.exitoConfirmado,
+               resuelta: deduccionResuelta(), confirmada: deduccionConfirmada() };
+    },
+    /* Costura de diagnóstico: deja ver por qué una tarjeta aparece o no. No se
+       pinta en pantalla y no expone nada que no esté ya en la página. */
+    porQue: function (id) {
+      var p = porId(id);
+      if (!p) return null;
+      return { id: id, condicion: aplicaSinTras(p), aplica: aplica(p),
+               respondida: estaRespondida(p), tras: p.tras || [],
+               disponibilidad: marcados("disponibilidad"), falta: marcados("falta") };
+    },
+    /* Costura de diagnóstico: deja ver por qué el motor deduce o no. No se pinta
+       en pantalla ni expone nada que no esté ya en la propia página. */
+    diagnostico: function () {
+      return {
+        respondidas: preguntasRespondidas().map(function (p) { return p.id; }),
+        aplicables: preguntasAplicables().map(function (p) { return p.id; }),
+        version: STORAGE_VERSION
+      };
+    },
+    disponibilidadResuelta: function () { return disponibilidadResuelta(); },
+    /* ¿Está todo cerrado? Es lo que decide si el panel es el cierre o solo el
+       estado de la visita a medias. */
+    listo: function () { return todoListo(); },
+    pendientes: function () {
+      return { preguntas: preguntasAplicables().map(function (p) { return p.id; }),
+               deduccion: !!exitoDeducido() && !deduccionResuelta() };
+    },
+    briefingCerrado: function () { return briefingCerrado(); },
+    estadoBriefing: function () { return estadoBriefing(); },
+    fase: function () { return document.getElementById("result").getAttribute("data-open") === "true" ? "revision" : "preguntas"; },
+    /* Confirmar la ronda sin depender de un clic: es EXACTAMENTE lo que hace el
+       boton (validar, depurar y pintar lo que toca), pero se lo puede pedir la
+       prueba de comportamiento sin pelearse con el repintado. Los gestos de
+       verdad (clic y toque) se prueban en su propio escenario. */
+    confirmar: function () { form.requestSubmit(); return estado.preguntadas.slice(); },
+    /* Pintar ahora mismo lo que toque (ronda o resumen). Es la costura que usa
+       la prueba de comportamiento para no depender del fotograma. */
+    pintar: function () { pintarLoQueToca(); return estado.preguntadas.slice(); },
+    /* Volver a las preguntas anteriores, igual que hace el boton de «Atras». */
+    volver: function () {
+      navegar(-1);
+      return { ronda: tarjetasDeLaPantalla().map(function (p) { return p.id; }), abierto: result.getAttribute("data-open"),
+               pantalla: estado.pantalla, revision: enRevision(), tarjetas: contenedor.children.length };
+    },
+    /* Y seguir hacia delante, igual que hace «Continuar». */
+    seguir: function () {
+      navegar(1);
+      return { ronda: tarjetasDeLaPantalla().map(function (p) { return p.id; }), abierto: result.getAttribute("data-open"),
+               pantalla: estado.pantalla, revision: enRevision(), tarjetas: contenedor.children.length };
+    },
+    /* El recorrido tal cual lo lleva el motor: qué pantallas ha descubierto y en
+       cuál está mirando. Lo usa la prueba de navegación para comprobar que volver
+       atrás devuelve la pantalla anterior, y no otra recalculada. */
+    recorrido: function () {
+      return { pantallas: (estado.pantallas || []).map(function (g) { return g.slice(); }),
+               pantalla: estado.pantalla, descubiertas: pantallasDescubiertas(),
+               revision: enRevision(), atras: hayAtras(), delante: hayDelante() };
+    },
+    opcionesDe: function (id) { var p = porId(id); return p ? valoresDeOpciones(p) : []; },
+    versionCuestionario: "revision-3"
+  };
 })();
 </script>
 </body>
