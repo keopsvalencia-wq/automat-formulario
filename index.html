@@ -382,16 +382,13 @@
     font-family:var(--font-display);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 11px;
   }
   .bloque--ok h3{color:var(--green)}
-  .bloque--ded h3{color:var(--purple-light)}
-  .bloque--pend h3{color:var(--orange-soft)}
   .bloque__nota{margin:0 0 12px;font-size:13.6px;color:var(--muted);line-height:1.5}
   .bloque ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:11px}
   .bloque li{font-size:15px;color:var(--text-soft);line-height:1.5}
   .bloque li em{display:block;font-style:normal;font-size:13.5px;color:var(--muted);margin-top:3px}
   .bloque li b{font-weight:600;color:var(--text)}
-  .bloque li.bloque__ded{border-left:2px solid rgba(168,85,247,.5);padding-left:12px}
-  .bloque li.bloque__ded b{color:var(--purple-light)}
-  .bloque__vacio{font-size:14.6px;color:var(--muted)}
+  /* Un «Aún no lo sé» es una respuesta suya más: se marca sin sacarlo de la lista. */
+  .bloque li.bloque__nose b{color:var(--orange-soft)}
   /* El estado del cuestionario, dicho tal cual: completado solo si no queda
      nada material por resolver. Habla del cuestionario, no del proyecto. */
   .estado-briefing{
@@ -535,23 +532,15 @@
       <h2 id="rev-titulo-pendiente" hidden>Tu cuestionario, hasta ahora</h2>
       <p id="rev-texto-pendiente" hidden>Aquí tienes lo que llevas. Todavía queda algo por resolver, y lo tienes justo aquí abajo: se hace de una vez.</p>
 
+      <!-- El resumen final enseña SOLO lo que ha contestado él. Lo que he
+           deducido yo no se le pone aquí delante: si es importante, se le pide
+           que lo confirme ANTES del resumen (tarjeta H), y una vez confirmado
+           aparece entre sus respuestas. Y un «Aún no lo sé» es una respuesta
+           suya más: no crea ningún apartado en la pantalla. -->
       <div class="bloque bloque--ok">
         <h3>Confirmado por ti</h3>
         <p class="bloque__nota">Lo que has contestado tú, tal cual. Esto es un dato.</p>
         <ul id="rev-confirmado"></ul>
-      </div>
-
-      <div class="bloque bloque--ded">
-        <h3>Deducido por mí · por confirmar</h3>
-        <p class="bloque__nota">No me lo has dicho tú: lo he deducido de tus respuestas. No lo doy por bueno hasta que me digas que sí.</p>
-        <ul id="rev-deducido"></ul>
-        <p class="bloque__vacio" id="rev-deducido-vacio">Nada deducido: todo lo de arriba lo has dicho tú.</p>
-      </div>
-
-      <div class="bloque bloque--pend">
-        <h3>Pendiente · aún no lo sabes</h3>
-        <ul id="rev-pendiente"></ul>
-        <p class="bloque__vacio" id="rev-pendiente-vacio">Nada pendiente: me lo has contestado todo.</p>
       </div>
 
       <p class="estado-briefing" id="rev-estado" role="status"></p>
@@ -995,7 +984,6 @@ var CONFIG = {
       nota: "Esto no me lo has dicho tú: lo he deducido de lo que me has contado. Antes de cerrar, lo miramos un momento.",
       hecho: "successMetric · confirmación de la conclusión",
       dueno: "Lo resuelvo yo contigo",
-      notaPendiente: "No supiste decirlo. Queda pendiente como incógnita y te lo pregunto yo directamente, sin inventarme la respuesta.",
       opciones: [SI_ESO, NO_CORREGIR, NO_SE],
       textoSiempre: { etiqueta: "O dímelo con tus palabras", placeholder: "Por ejemplo: que no se me pase ninguna fecha" },
       tras: ["tarea", "disponibilidad", "momento", "aclaracion", "caidas", "falta",
@@ -1991,12 +1979,19 @@ var CONFIG = {
 
   /* ====================================================================
      8. REVISIÓN
-     Tres apartados, separados a propósito: lo que ha confirmado él, lo que he
-     deducido yo (sin sellar) y lo que se queda pendiente porque no lo sabe.
-     Eso es para él, en pantalla. En el mensaje de envío solo viaja lo suyo:
-     sus respuestas nuevas, las deducciones que ha confirmado y sus incógnitas
-     declaradas. Lo que ya estaba apuntado de la reunión y lo que no se le
-     pregunta son documentación del proyecto: no se le muestran ni viajan.
+     El resumen final enseña SOLO lo que ha contestado él: sus respuestas, el
+     estado y los botones de envío. Nada más, y nada vacío.
+
+     Lo que he deducido yo no aparece aquí: si era importante, se le ha pedido
+     que lo confirme antes (tarjeta H) y, confirmado, sale entre sus respuestas
+     como cualquier otra. Y un «Aún no lo sé» es una respuesta suya más: no crea
+     ningún apartado en la pantalla, pero se conserva y viaja a Agencia Automat
+     con su dueño (ver `incognitasDeclaradas`).
+
+     En el mensaje de envío viaja lo suyo: sus respuestas nuevas, las
+     deducciones que ha confirmado y sus incógnitas declaradas. Lo que ya estaba
+     apuntado de la reunión y lo que no se le pregunta son documentación del
+     proyecto: no se le muestran ni viajan.
      ==================================================================== */
   function preguntasRespondidas() {
     return PREGUNTAS.filter(function (p) {
@@ -2119,64 +2114,52 @@ var CONFIG = {
     document.getElementById("rev-texto-pendiente").hidden = listo;
 
     var confirmado = document.getElementById("rev-confirmado");
-    var deducido = document.getElementById("rev-deducido");
-    var pendiente = document.getElementById("rev-pendiente");
-    confirmado.innerHTML = ""; deducido.innerHTML = ""; pendiente.innerHTML = "";
+    confirmado.innerHTML = "";
 
-    var hayConfirmado = false, hayPendiente = false;
+    var hayConfirmado = false;
 
-    /* 1 · CONFIRMADO: lo que ha contestado él, tal cual, sin interpretar.
-          La tarjeta que confirma mi conclusión no se enseña como si fuera una
-          pregunta suya: lo que cuenta es el criterio de éxito que ha quedado. */
+    /* EL RESUMEN: lo que ha contestado él, tal cual, sin interpretar. Cada cosa
+       en su sitio y nada más:
+         · lo que ha contestado → su respuesta;
+         · un «Aún no lo sé»   → también es su respuesta, dicha como tal;
+         · la tarjeta que confirma mi conclusión no se enseña como si fuera una
+           pregunta suya: si la confirmó, lo que cuenta es el criterio de éxito,
+           que sale entre sus respuestas como cualquier otra;
+         · y lo que he deducido yo NO se le pone aquí delante: si era
+           importante, se lo he preguntado antes (tarjeta H). */
     preguntasRespondidas().forEach(function (p) {
       if (p.id === "exitoDeducido") return;
       var li = document.createElement("li");
-      var destino;
+      hayConfirmado = true;
       if (esNoSe(p)) {
-        destino = pendiente;
-        hayPendiente = true;
-        li.innerHTML = "<b>" + escapar(p.corto) + "</b><em>" +
-          escapar(p.notaPendiente || ("Aún no lo sabes. Queda pendiente y lo resuelvo yo: " + (p.dueno || "Salva") + ".")) +
-          "</em>";
+        /* Su incógnita: se conserva y viaja a Agencia Automat con su dueño,
+           pero en la pantalla es una respuesta suya más, sin apartado propio. */
+        li.className = "bloque__nose";
+        li.innerHTML = "<b>" + escapar(p.corto) + "</b> " + escapar(textoRespuesta(p));
       } else {
-        destino = confirmado;
-        hayConfirmado = true;
         li.innerHTML = "<b>" + escapar(p.corto) + "</b> " + escapar(textoRespuesta(p));
       }
-      destino.appendChild(li);
+      confirmado.appendChild(li);
     });
 
-    /* Si no supo responder a mi conclusión, la incógnita es suya y queda dicha,
-       con su dueño, aunque la respuesta a esa tarjeta no se conserve. */
-    var sinSaberlo = revisionDeLaDeduccion() === "no-lo-se" &&
-      (!estado.respuestas.exitoDeducido || esNoSe(porId("exitoDeducido")));
-    if (sinSaberlo) {
+    /* Si no supo decir su criterio de éxito, la incógnita es suya y queda dicha
+       —con su dueño, para Agencia Automat— aunque la respuesta a esa tarjeta no
+       se conserve. En pantalla, una respuesta más… y solo una: si ya marcó
+       «Aún no lo sé» en esa tarjeta, ya está dicha y no se repite. */
+    if (!exitoDeducido() && revisionDeLaDeduccion() === "no-lo-se" && !incognitaDeExitoYaDicha()) {
       var liNoSe = document.createElement("li");
-      liNoSe.innerHTML = "<b>G. Qué te haría decir que funciona</b><em>No supiste decirlo. Queda pendiente como incógnita y lo resuelvo yo contigo, sin inventarme la respuesta.</em>";
-      pendiente.appendChild(liNoSe);
-      hayPendiente = true;
+      liNoSe.className = "bloque__nose";
+      liNoSe.innerHTML = "<b>" + escapar(M_CORTO_EXITO) + "</b> " + escapar(NO_SE);
+      confirmado.appendChild(liNoSe);
+      hayConfirmado = true;
     }
-
-    /* 2 · DEDUCIDO: conclusión mía, con su regla a la vista y SIN sellar. No
-          se mezcla con lo que él ha contestado. Si ya la ha confirmado, deja de
-          estar aquí: es suya, y sale arriba, entre lo confirmado por él. */
-    var conclusion = exitoDeducido();
-    if (conclusion && !estado.respuestas.exito && !conclusion.confirmado) {
-      var liDed = document.createElement("li");
-      liDed.className = "bloque__ded";
-      liDed.innerHTML = "<b>G. Qué te haría decir que funciona</b> " + escapar(conclusion.texto) +
-                        "<em>" + escapar(conclusion.regla) + " No me lo has dicho tú: no lo doy por bueno hasta que me lo confirmes.</em>";
-      deducido.appendChild(liDed);
-    }
-    document.getElementById("rev-deducido-vacio").hidden = !!deducido.children.length;
 
     if (!hayConfirmado) {
       confirmado.innerHTML = '<li class="bloque__vacio">Todavía no me has contestado nada.</li>';
     }
-    document.getElementById("rev-pendiente-vacio").hidden = hayPendiente;
 
-    /* 3 · El estado del briefing, sin adornos: cerrado solo si no queda nada
-          material que él deba confirmar. */
+    /* El estado del cuestionario, sin adornos: completado solo si no queda nada
+       material que él deba confirmar. */
     var estadoB = estadoBriefing();
     var cajaEstado = document.getElementById("rev-estado");
     cajaEstado.textContent = estadoB.aviso;
@@ -2254,6 +2237,16 @@ var CONFIG = {
       lista.push(M_CORTO_EXITO + " → lo resuelve: Salva, contigo");
     }
     return lista;
+  }
+
+  /* ¿Ese «Aún no lo sé» ya está entre sus respuestas? Sirve para no ponerlo dos
+     veces: una cuando él marca «Aún no lo sé» en la tarjeta del éxito, y otra
+     cuando no supo confirmar mi conclusión (que es la misma incógnita). */
+  function incognitaDeExitoYaDicha() {
+    var r = estado.respuestas.exito;
+    if (!r) return false;
+    if (r.noSe) return true;
+    return (r.valores || []).indexOf(NO_SE) >= 0;
   }
 
   /* El estado, sin adornos: el cuestionario está completado. Sin explicaciones
