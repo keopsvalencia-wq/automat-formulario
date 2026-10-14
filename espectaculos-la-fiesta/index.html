@@ -623,7 +623,7 @@ var CONFIG = {
      ==================================================================== */
 
   var STORAGE_KEY = "automat-espectaculos-lafiesta-adaptativo";
-  var STORAGE_VERSION = 1;
+  var STORAGE_VERSION = 2;
 
   /* Cuántas preguntas se le enseñan en una pantalla. Nunca se enseña una pregunta
      futura: cada pantalla se calcula con lo respondido en las anteriores. */
@@ -642,6 +642,10 @@ var CONFIG = {
      no sabe decir su criterio de éxito, la incógnita es suya igual y hay que
      poder nombrarla en el mensaje sin depender de que la tarjeta esté guardada. */
   var M_CORTO_EXITO = "G. Qué te haría decir que funciona";
+  /* Nombre corto de la prioridad. La primera pregunta es de varias y su
+     respuesta son todas las tareas marcadas; esta línea dice cuál de ellas
+     abre la demostración. Solo sale cuando ha tenido que elegir. */
+  var M_CORTO_PRIORIDAD = "1 bis. Cuál va primero en la demostración";
 
   /* Las tres salidas de la tarjeta que confirma una conclusión mía. */
   var SI_ESO = "Sí, es justo eso";
@@ -789,9 +793,13 @@ var CONFIG = {
     /* ---------------- Las tres aprobadas ---------------- */
     {
       id: "tarea",
-      tipo: "single",
-      corto: "1. Tarea prioritaria",
-      titulo: "De las tareas que más tiempo te quitan, ¿cuál te gustaría ver funcionando en la primera versión?",
+      /* De varias: puede querer mejorar más de una tarea, y todas se conservan.
+         La que se enseña primero en la demostración la elige él después, en la
+         tarjeta de la prioridad, y solo si ha marcado más de una. */
+      tipo: "multi",
+      corto: "1. Tareas que quieres mejorar",
+      titulo: "De las tareas que más tiempo te quitan, ¿cuáles te gustaría ver funcionando?",
+      ayuda: "Puedes marcar varias.",
       hecho: "mvpScope · alcance de la primera versión",
       dueno: "Lo decido yo contigo en la revisión, con tu visto bueno",
       opciones: [
@@ -826,6 +834,41 @@ var CONFIG = {
       otra: { etiqueta: "¿Cómo lo haces?", placeholder: "Escríbelo con tus palabras" }
     },
 
+    /* ---------------- Paso 2: cuál va primero (tarjeta E bis) ----------------
+       Va JUSTO DETRÁS de las tres aprobadas y ANTES de cualquier tarjeta
+       adaptativa: primero marca todas las tareas que quiere mejorar, después
+       elige cuál abre la demostración, y solo entonces se le pregunta por lo
+       que le cuesta en ESA tarea. Los demás pasos dependen de este: las
+       tarjetas adaptativas (A, B, C, D, E y F) esperan a que la prioridad esté
+       resuelta, para que ninguna pregunte por una tarea que todavía no es la
+       suya. */
+    {
+      id: "tareaPrioridad",
+      tipo: "single",
+      condicional: true,
+      corto: "1 bis. Cuál va primero en la demostración",
+      /* Solo tiene sentido cuando hay MÁS DE UNA tarea que elegir: con una
+         sola, esa es la prioridad y no se le pregunta nada. Y las opciones son
+         exactamente las tareas que ha marcado —las de la lista y, si la
+         escribió, la suya—: ni una más. */
+      titulo: "Has marcado más de una tarea. ¿Cuál te gustaría ver funcionando primero en la demostración?",
+      nota: "Las demás no se pierden: me las llevo todas apuntadas y las tengo en cuenta.",
+      ayuda: "Aquí solo puedes elegir una: la que abre la demostración.",
+      eco: true,
+      hecho: "mvpScope · tarea prioritaria de la primera demostración",
+      dueno: "Lo decidimos en la revisión, contigo",
+      opciones: function () { return tareasElegidas(); },
+      /* Sin «Aún no lo sé» ni «Otra opción»: aquí no hay nada que no saber, las
+         tareas ya las ha marcado él y la que elija es la que abre la demo. Un
+         comodín aquí sería una salida que no lleva a ninguna parte. */
+      sinComodin: true,
+      /* Espera a que estén contestadas las tres aprobadas, y a nada más: es el
+         segundo paso del recorrido. Lo que venga detrás es lo que espera a
+         esta tarjeta (`trasOrden`), no al revés. */
+      tras: ["tarea", "tiempo", "disponibilidad"],
+      cuando: function () { return tocaLaPrioridad(); }
+    },
+
     /* ---------------- Tarjeta A ---------------- */
     {
       id: "momento",
@@ -844,8 +887,12 @@ var CONFIG = {
       ],
       otra: { etiqueta: "¿Cómo lo haces?", placeholder: "Escríbelo con tus palabras" },
       /* Ninguna tarjeta de disponibilidad se adelanta a la pregunta 3: si no
-         sabemos cómo lo comprueba hoy, no hay nada que profundizar todavía. */
+         sabemos cómo lo comprueba hoy, no hay nada que profundizar todavía.
+         Y ninguna se adelanta a la prioridad: el recorrido es primero las
+         tareas, después cuál va primero y solo entonces el resto. Es una
+         dependencia SOLO de orden: su respuesta no se cae por esto. */
       tras: ["disponibilidad"],
+      trasOrden: ["tareaPrioridad"],
       cuando: function () {
         return A_MANO.some(function (m) { return marcados("disponibilidad").indexOf(m) >= 0; });
       }
@@ -869,6 +916,8 @@ var CONFIG = {
       ],
       otra: { etiqueta: "¿Cuál más?", placeholder: "Escríbelo con tus palabras" },
       tras: ["disponibilidad"],
+      /* Igual que A: no se adelanta a la prioridad, y eso no invalida nada. */
+      trasOrden: ["tareaPrioridad"],
       cuando: function () {
         return parecePapeles(textoLibre("disponibilidad")) || parecePapeles(textoLibre("momento"));
       }
@@ -891,6 +940,8 @@ var CONFIG = {
       ],
       otra: { etiqueta: "¿Cada cuánto?", placeholder: "Escríbelo con tus palabras" },
       tras: ["disponibilidad"],
+      /* Igual que A: no se adelanta a la prioridad, y eso no invalida nada. */
+      trasOrden: ["tareaPrioridad"],
       cuando: function () {
         var reales = marcados("disponibilidad").filter(function (v) {
           return v !== NO_SE && v !== OTRA;
@@ -909,6 +960,8 @@ var CONFIG = {
       hecho: "resourceCapacity · solución",
       dueno: "Lo decido yo en la revisión interna",
       tras: ["disponibilidad", "caidas"],
+      /* Igual que A: no se adelanta a la prioridad, y eso no invalida nada. */
+      trasOrden: ["tareaPrioridad"],
       opciones: [
         "Ver de una vez qué está libre ese día en las cuatro",
         "Verlo junto al presupuesto que estoy haciendo, sin cambiar de pantalla",
@@ -941,7 +994,12 @@ var CONFIG = {
       },
       hecho: "mvpScope · profundización de la tarea elegida",
       dueno: "Lo decidimos en la revisión, contigo",
-      tras: ["tarea"],
+      /* La tarjeta es la de la tarea que VA PRIMERO: por eso espera a que la
+         prioridad esté resuelta (con una sola tarea, esa ya es la prioridad y
+         no hay nada que esperar). Aquí sí es una dependencia de verdad: si la
+         tarea que va primero cambia, esta tarjeta es otra y su respuesta
+         anterior se cae. */
+      tras: ["tarea", "tareaPrioridad"],
       opciones: function () {
         var rama = RAMAS[valorTarea()];
         return rama ? rama.opciones : [];
@@ -962,13 +1020,18 @@ var CONFIG = {
       nota: "Con una línea me vale.",
       hecho: "mvpScope · tarea no listada",
       dueno: "Lo propongo yo, con tu visto bueno",
-      tras: ["tarea"],
+      /* Como E: nombra la tarea que va primero, así que espera a la prioridad
+         (y su respuesta se cae si esa tarea cambia). */
+      tras: ["tarea", "tareaPrioridad"],
       cuando: function () {
+        /* Se le pregunta mientras la que va primero no sea una tarea de la
+           lista: porque no supo cuál (o no la marcó) o porque la escribió él.
+           Su tarea escrita también hay que nombrarla y saber quién la hace. */
         var t = valorTarea();
-        return t === NO_SE || t === OTRA;
+        if (t === NO_SE || t === OTRA) return true;
+        return RAMAS[t] === undefined;
       }
     },
-
     /* ---------------- Tarjeta H: confirmar la deducción ---------------- */
     {
       id: "exitoDeducido",
@@ -987,7 +1050,7 @@ var CONFIG = {
       opciones: [SI_ESO, NO_CORREGIR, NO_SE],
       textoSiempre: { etiqueta: "O dímelo con tus palabras", placeholder: "Por ejemplo: que no se me pase ninguna fecha" },
       tras: ["tarea", "disponibilidad", "momento", "aclaracion", "caidas", "falta",
-             "tareaDetalle", "tareaDesconocida"],
+             "tareaDetalle", "tareaDesconocida", "tareaPrioridad"],
       cuando: function () {
         /* Solo tiene sentido si hay algo que comprobar y él no lo ha visto
            todavía. Si ya dijo que no, que no lo sabe, o lo confirmó, la tarjeta
@@ -1093,7 +1156,65 @@ var CONFIG = {
   }
   function marcados(id) { return resp(id).valores.slice(); }
   function textoLibre(id) { return (resp(id).otra || "").trim(); }
-  function valorTarea() { return marcados("tarea")[0] || null; }
+
+  /* ====================================================================
+     LA TAREA: TODAS LAS QUE HA MARCADO, Y LA QUE VA PRIMERO
+     --------------------------------------------------------------------
+     La primera pregunta es de VARIAS: él puede querer mejorar más de una
+     tarea, y todas se conservan (en el resumen y en el mensaje). De ahí
+     salen dos cosas distintas, que no se pueden confundir:
+
+       · `tareasReales()`      → las tareas de la lista que ha marcado, todas.
+       · `valorTarea()`        → LA QUE VA PRIMERO en la demostración: la que
+                                 él ha elegido en la tarjeta de la prioridad,
+                                 o la única que marcó (entonces no se le
+                                 pregunta), o «Aún no lo sé» / su otra tarea.
+
+     `valorTarea()` es lo que usan las tarjetas de después, el eco, el resumen
+     y el mensaje: la demostración se adapta a la tarea prioritaria, pero las
+     demás necesidades siguen viajando enteras por `tareasElegidas()`.
+     ==================================================================== */
+  function tareasReales() {
+    return marcados("tarea").filter(function (v) { return v !== NO_SE && v !== OTRA; });
+  }
+  /* Si marcó «Otra opción» con su texto, esa también es una tarea suya: se le
+     añade a la lista, marcada como suya, para poder priorizarla igual. */
+  function otrasTareas() {
+    var escrito = textoLibre("tarea");
+    return escrito ? [escrito] : [];
+  }
+  /* Todas las tareas que ha elegido, dichas como él las dijo: las de la lista
+     y, si la escribió, la suya. Es lo que viaja sin perder nada. */
+  function tareasElegidas() {
+    return tareasReales().concat(otrasTareas().map(function (t) {
+      return t + " (otra opción)";
+    }));
+  }
+  /* Lo único que le queda por nombrar: marcó «Otra opción» sin escribirla. */
+  function valorTareaEscrita() {
+    var t = textoLibre("tarea");
+    return t ? t + " (otra opción)" : OTRA;
+  }
+
+  /* --- Cuál va primero, tal cual, sin dar nada por supuesto ---
+     Devuelve la tarea que él ha elegido en la tarjeta de la prioridad, o "" si
+     todavía no ha elegido ninguna. No se cae al primer valor marcado: lo que
+     decide si tiene que elegir es que la prioridad esté VACÍA, y si se rellenara
+     sola, la tarjeta no se le enseñaría nunca. */
+  function prioridadVigente() {
+    var p = marcados("tareaPrioridad")[0];
+    if (!p) return "";
+    return tareasElegidas().indexOf(p) >= 0 ? p : "";
+  }
+  /* La que abre la demostración: la que él ha elegido, o la única que marcó
+     (entonces no se le pregunta nada), o «Aún no lo sé» / su otra tarea. */
+  function valorTarea() {
+    var elegidas = tareasElegidas();
+    var elegida = prioridadVigente();
+    if (elegida) return elegida;
+    if (elegidas.length) return elegidas[0];
+    return marcados("tarea")[0] || null;
+  }
   function sinRespuesta(id) { return !estado.respuestas[id]; }
 
   function opcionesDe(p) {
@@ -1229,9 +1350,13 @@ var CONFIG = {
     var f = marcados("tareaDesconocida");
     if (f.length && f[0] !== NO_SE && f[0] !== OTRA) d.push(f[0]);
     d.push(textoEscrito("tareaDesconocida"));
-    var t = marcados("tarea");
-    if (t.length && t[0] !== NO_SE && t[0] !== OTRA) d.push(t[0]);
+    /* TODAS las tareas que ha marcado son suyas: si marcó tres, las tres
+       cuentan. Y la que va primero también, porque es la que abre la
+       demostración. Ninguna se pierde por el camino. */
+    tareasElegidas().forEach(function (t) { d.push(t); });
     d.push(textoEscrito("tarea"));
+    var pr = marcados("tareaPrioridad");
+    if (pr.length && pr[0] !== NO_SE && pr[0] !== OTRA) d.push(pr[0]);
     return d.filter(function (x) { return !!x; });
   }
 
@@ -1357,7 +1482,7 @@ var CONFIG = {
     /* No se adelanta a ninguna de las tarjetas de las que depende su contenido:
        primero se pregunta, y con eso se filtra esta. */
     return ["tarea", "disponibilidad", "momento", "aclaracion", "caidas", "falta",
-            "tareaDetalle", "tareaDesconocida"].every(resueltaONoAplica);
+            "tareaDetalle", "tareaDesconocida", "tareaPrioridad"].every(resueltaONoAplica);
   }
 
   /* --- El criterio de éxito que se le enseña y que viaja en el mensaje ---
@@ -1425,14 +1550,30 @@ var CONFIG = {
     if (!p) return true;
     return estaRespondida(p) || !aplica(p);
   }
+  /* --- ¿Le toca ya esta pregunta? ---
+     `tras` son las preguntas de las que DEPENDE: si alguna sigue aplicable y sin
+     contestar, esta no se le enseña todavía. Y cuando una de ellas se cae, la
+     respuesta que dependía de ella también se cae (ver `depurarRespuestas`).
+
+     `trasOrden` son las preguntas que solo marcan el ORDEN del recorrido: esta
+     no se adelanta a ellas, pero su respuesta NO se cae por su culpa. Es lo que
+     usa el paso de la prioridad: primero se elige cuál abre la demostración y
+     después se pregunta lo demás, y volver atrás a cambiar las tareas no borra
+     lo que ya contestó. */
   function aplica(p) {
     var previas = p.tras || [];
     for (var i = 0; i < previas.length; i++) {
       var q = porId(previas[i]);
       if (q && aplica(q) && !estaRespondida(q)) return false;
     }
+    var porOrden = p.trasOrden || [];
+    for (var j = 0; j < porOrden.length; j++) {
+      var o = porId(porOrden[j]);
+      if (o && aplica(o) && !estaRespondida(o)) return false;
+    }
     return p.cuando ? !!p.cuando() : true;
   }
+  /* La condición propia de una pregunta, sin mirar de quién depende. */
   function aplicaSinTras(p) {
     return p.cuando ? !!p.cuando() : true;
   }
@@ -1474,8 +1615,11 @@ var CONFIG = {
            atrás de verdad (eso lo cubre la regla de las dependencias caídas). */
         if ((p.id === "exitoDeducido" || p.id === "exito") && estaRespondida(p)) return;
         var fuera = false;
-        /* Su condición propia sí manda: si ya no se cumple, no se conserva. */
-        if (!aplicaSinTras(p)) fuera = true;
+        /* Su condición propia sí manda: si ya no se cumple, no se conserva. La
+           tarjeta de la prioridad se mira por su condición de verdad (con más de
+           una tarea que elegir), no por si toca enseñarla ahora mismo. */
+        var suya = p.id === "tareaPrioridad" ? canSayPriority() : aplicaSinTras(p);
+        if (!suya) fuera = true;
         /* Y una respuesta anterior que se haya caído también se lo lleva. */
         if (!fuera) {
           (p.tras || []).forEach(function (id) {
@@ -1486,6 +1630,18 @@ var CONFIG = {
         if (!fuera && !opcionValida(p, r)) fuera = true;
         if (fuera) { delete estado.respuestas[p.id]; cambio = true; }
       });
+      /* Y la tarea que iba primero, si ha dejado de existir entre las marcadas
+         (cambió las tareas, o borró el texto de la suya), no se arrastra: se
+         limpia y se vuelve a preguntar con la lista nueva. Nada de guardar una
+         prioridad que ya no es de nadie.
+         Ojo: lo que decide es si la respuesta SIGUE VALIENDO, no si la tarjeta
+         se enseña ahora mismo. Que antes toque la tarjeta de su rama es orden de
+         preguntas, no una contradicción: si se mirara eso, la prioridad recién
+         elegida se borraría sola. */
+      if (estado.respuestas.tareaPrioridad && !prioridadVigente()) {
+        delete estado.respuestas.tareaPrioridad;
+        cambio = true;
+      }
     }
   }
 
@@ -1551,7 +1707,44 @@ var CONFIG = {
     if (estado.pantalla === ANTES) return preguntasDeLaPrimera();
     if (enRevision()) return [];
     var guardada = pantallaGuardada(estado.pantalla);
-    return guardada.length ? guardada : preguntasNuevas();
+    /* La pantalla que ya vio se le devuelve tal cual, con sus respuestas… menos
+       cuando una de sus tarjetas ya no es la misma. Eso pasa con la tarjeta de
+       la tarea elegida: si cambia la tarea que va primero, su rama cambia, y
+       devolverle la vieja sería preguntarle por una tarea que ya no es. En ese
+       caso se recalcula: no se le enseña nunca una tarjeta que ya no es suya. */
+    if (guardada.length && pantallaSigueValiendo(guardada)) return guardada;
+    var nuevas = preguntasNuevas();
+    /* Si la pantalla vieja ya no vale y no hay nada nuevo que enseñarle, no se
+       le deja mirando una pantalla vacía: lo que ya contestó vale —la respuesta
+       sigue ahí— y lo que toca es cerrar y enseñarle el resumen. Es el caso de
+       una tarjeta cuyo texto se contradice al marcarla: no se queda sin salida. */
+    return nuevas.length ? nuevas : guardada;
+  }
+  /* ¿Sigue valiendo la pantalla guardada? Dos cosas, y las dos importan:
+       1. si su lista de opciones cambia con las respuestas (la rama de la tarea
+          elegida), tiene que seguir siendo LA MISMA que cuando se le enseñó. Es
+          lo que evita devolverle la tarjeta de una tarea que ya no es la suya.
+       2. una tarjeta que NO ha contestado tiene que seguir aplicando: si dejó de
+          aplicar sin que él la contestara, esa pantalla ya no es la suya.
+     Lo que ya contestó no se juzga: es suyo, y volver a enseñárselo al retroceder
+     no rompe nada (es lo que se le dio). Si se tirara, al volver atrás se
+     encontraría una pantalla vacía. */
+  function pantallaSigueValiendo(ids) {
+    for (var i = 0; i < ids.length; i++) {
+      var p = porId(ids[i]);
+      if (!p) return false;
+      var respondida = estaRespondida(p);
+      if (!respondida && !aplica(p)) return false;
+      if (typeof p.opciones !== "function") continue;
+      if (!p._opcionesVistas) continue;
+      if (!mismoListado(p._opcionesVistas, valoresDeOpciones(p))) return false;
+    }
+    return true;
+  }
+  function mismoListado(a, b) {
+    if (a.length !== b.length) return false;
+    for (var i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;
+    return true;
   }
   /* Las que le tocarán en la pantalla siguiente, calculadas con lo que acaba de
      contestar. Solo se miran para saber si hay pantalla nueva; no se guardan
@@ -1657,7 +1850,7 @@ var CONFIG = {
            (ayuda ? '<span class="opt__quote">' + escapar(ayuda) + '</span>' : '') +
            '</span></span></label>';
     });
-    if (p.tipo !== "texto") {
+    if (p.tipo !== "texto" && !p.sinComodin) {
       h += '<label class="opt opt--soft"><input type="' + (multi ? "checkbox" : "radio") +
            '" name="' + p.id + '" value="' + NO_SE + '" data-exclusive-soft="1">' +
            '<span class="opt__box"><span class="opt__tick" aria-hidden="true"></span>' +
@@ -1678,6 +1871,11 @@ var CONFIG = {
     sec.className = "q" + (p.condicional ? " q--seguimiento" : "");
     sec.id = "q-" + p.id;
     sec.setAttribute("data-pregunta", p.id);
+
+    /* Se apunta con qué opciones se le enseñó esta tarjeta. Es lo que después
+       permite saber si sigue siendo la misma: con la rama de la tarea elegida,
+       la lista cambia con la respuesta y la pantalla vieja ya no vale. */
+    if (typeof p.opciones === "function") p._opcionesVistas = valoresDeOpciones(p);
 
     /* Las tres aprobadas conservan su numeración aunque la visita se retome a
        medias: son la 1, la 2 y la 3, siempre. Las de seguimiento no llevan
@@ -1714,9 +1912,10 @@ var CONFIG = {
            '<input id="in-' + p.id + '" type="text" name="' + p.id + '_otra" placeholder="Por ejemplo: las subvenciones, y las lleva Alex" autocomplete="off" enterkeyhint="done"></div>';
       h += '<fieldset class="opts" aria-labelledby="lbl-' + p.id + '">' +
            '<legend class="sr-only">' + escapar(tituloDe(p)) + '</legend>' +
-           '<label class="opt opt--soft"><input type="checkbox" name="' + p.id + '" value="' + NO_SE + '" data-exclusive-soft="1">' +
-           '<span class="opt__box"><span class="opt__tick" aria-hidden="true"></span>' +
-           '<span class="opt__label">' + NO_SE + '</span></span></label></fieldset>';
+           (p.sinComodin ? "" :
+             '<label class="opt opt--soft"><input type="checkbox" name="' + p.id + '" value="' + NO_SE + '" data-exclusive-soft="1">' +
+             '<span class="opt__box"><span class="opt__tick" aria-hidden="true"></span>' +
+             '<span class="opt__label">' + NO_SE + '</span></span></label>') + '</fieldset>';
     } else {
       h += htmlOpciones(p);
       if (p.otra) {
@@ -1781,6 +1980,11 @@ var CONFIG = {
     Array.prototype.forEach.call(grupo, function (input) {
       if (r.valores.indexOf(input.value) >= 0) input.checked = true;
     });
+    /* «Otra opción» se vuelve a marcar si él la dejó marcada. Sin esto, al
+       repintar la tarjeta quedaba desmarcada con su texto dentro: al confirmar
+       se perdía la tarea que había escrito, y con ella su respuesta. */
+    var cajaOtra = sec.querySelector('input[name="' + p.id + '"][data-other="1"]');
+    if (cajaOtra && r.valores.indexOf(OTRA) >= 0) cajaOtra.checked = true;
     var otra = sec.querySelector('input[name="' + p.id + '_otra"]');
     if (otra && r.otra) otra.value = r.otra;
     /* La conclusión que se le enseñó al llegar también se recupera en pantalla: si
@@ -1830,15 +2034,36 @@ var CONFIG = {
       : reales.length + " respuestas marcadas";
   }
 
-  /* La pregunta del tiempo nombra la tarea que acaba de elegir: así se ve que
-     el cuestionario va con lo que él contesta. */
+  /* La pregunta del tiempo nombra la tarea que va primero: así se ve que el
+     cuestionario va con lo que él contesta. Puede haber marcado varias; el
+     tiempo se le pide por la que abre la demostración, y las demás siguen
+     apuntadas. */
+  function tareaParaEco() {
+    var t = valorTarea();
+    if (!t || t === NO_SE || t === OTRA) return null;
+    return t;
+  }
   function sincronizarEco() {
     var eco = document.getElementById("eco-tiempo");
-    if (!eco) return;
-    var t = valorTarea();
-    if (!t || t === NO_SE || t === OTRA) { eco.hidden = true; eco.textContent = ""; return; }
-    eco.hidden = false;
-    eco.innerHTML = "Hablamos de <b>" + escapar(t) + "</b>.";
+    if (eco) {
+      var t = tareaParaEco();
+      if (!t) { eco.hidden = true; eco.textContent = ""; }
+      else {
+        eco.hidden = false;
+        eco.innerHTML = "Hablamos de <b>" + escapar(t) + "</b>.";
+      }
+    }
+    /* El eco de la prioridad: le devuelve TODAS las tareas que ha marcado, para
+       que elija sabiendo lo que hay. Aquí no se pierde ninguna de vista. */
+    var ecoPr = document.getElementById("eco-tareaPrioridad");
+    if (ecoPr) {
+      var todas = tareasElegidas();
+      if (todas.length < 2) { ecoPr.hidden = true; ecoPr.textContent = ""; }
+      else {
+        ecoPr.hidden = false;
+        ecoPr.innerHTML = "Has marcado <b>" + escapar(todas.join(" · ")) + "</b>.";
+      }
+    }
   }
 
   /* --- El avance son las PANTALLAS, una línea cada una ---
@@ -1999,21 +2224,29 @@ var CONFIG = {
     });
   }
 
-  function textoRespuesta(p) {
-    var r = resp(p.id);
+  /* El texto de una respuesta, con sus valores tal cual. Vale igual para una
+     pregunta de la lista, para la tarjeta que confirma una conclusión mía y
+     para las respuestas que se construyen al vuelo (la prioridad): así el
+     resumen y el mensaje las pintan todas por el mismo camino. Si no se le pasa
+     la respuesta, se lee del estado por su id. */
+  function textoDeValores(p, r) {
+    var v = r || resp(p.id);
     if (p.tipo === "texto") {
-      if (r.noSe) return NO_SE;
-      return r.otra;
+      if (v.noSe) return NO_SE;
+      return v.otra;
     }
     /* La tarjeta que confirma una conclusión mía responde con lo que él ha
        dicho: la conclusión, o lo que haya escrito con sus palabras. */
     if (p.confirma) {
-      if (r.noSe) return NO_SE;
-      return (r.otra || "").trim();
+      if (v.noSe) return NO_SE;
+      return (v.otra || "").trim();
     }
-    var vals = r.valores.filter(function (v) { return v !== OTRA; });
-    if (r.valores.indexOf(OTRA) >= 0 && r.otra) vals.push(r.otra + " (otra opción)");
+    var vals = (v.valores || []).filter(function (x) { return x !== OTRA; });
+    if ((v.valores || []).indexOf(OTRA) >= 0 && v.otra) vals.push(v.otra + " (otra opción)");
     return vals.join(" · ");
+  }
+  function textoRespuesta(p) {
+    return textoDeValores(p, resp(p.id));
   }
 
   function esNoSe(p) {
@@ -2131,14 +2364,10 @@ var CONFIG = {
       if (p.id === "exitoDeducido") return;
       var li = document.createElement("li");
       hayConfirmado = true;
-      if (esNoSe(p)) {
-        /* Su incógnita: se conserva y viaja a Agencia Automat con su dueño,
-           pero en la pantalla es una respuesta suya más, sin apartado propio. */
-        li.className = "bloque__nose";
-        li.innerHTML = "<b>" + escapar(p.corto) + "</b> " + escapar(textoRespuesta(p));
-      } else {
-        li.innerHTML = "<b>" + escapar(p.corto) + "</b> " + escapar(textoRespuesta(p));
-      }
+      /* Su incógnita se conserva y viaja a Agencia Automat con su dueño, pero
+         en la pantalla es una respuesta suya más, sin apartado propio. */
+      if (esNoSe(p)) li.className = "bloque__nose";
+      li.innerHTML = "<b>" + escapar(p.corto) + "</b> " + escapar(textoRespuesta(p));
       confirmado.appendChild(li);
     });
 
@@ -2255,6 +2484,59 @@ var CONFIG = {
     return "Cuestionario completado.";
   }
 
+  /* ====================================================================
+     LA TAREA PRIORITARIA EN EL RESUMEN Y EN EL MENSAJE
+     --------------------------------------------------------------------
+     La respuesta de la primera pregunta son TODAS las tareas que ha marcado:
+     esa línea viaja entera, con ninguna fuera. La prioridad es una respuesta
+     suya más —la de la tarjeta E bis— y va justo detrás, como una línea más
+     de «== RESPUESTAS NUEVAS ==».
+
+     Solo aparece cuando de verdad ha tenido que elegir: con una sola tarea,
+     esa es la prioridad y no hay nada que añadir. Y con «Aún no lo sé» o con
+     una tarea escrita sin nombrar tampoco hay prioridad que enseñar: eso se
+     resuelve en la tarjeta F, que ya viaja por su cuenta.
+
+     Se construye como una respuesta más (con sus valores) para que el resumen
+     y el mensaje la pinten por el MISMO camino que todas las demás: sin
+     código aparte que se pueda desincronizar.
+     ==================================================================== */
+  function hayPrioridadQueDecir() {
+    return prioridadVigente() !== "";
+  }
+  /* ¿Tiene sentido preguntarle cuál va primero? Solo con más de una tarea que
+     elegir: con una sola, esa es la prioridad y no se le pregunta nada.
+     Son DOS nombres para lo mismo, y se conservan los dos porque se leen en
+     sitios distintos y cada uno dice para qué se mira:
+       · `canSayPriority()`  → ¿su respuesta sigue teniendo sentido? Es lo que
+                                decide si una prioridad guardada se conserva.
+       · `tocaLaPrioridad()` → ¿toca enseñar la tarjeta ahora? Es la condición
+                                de la tarjeta.
+     No puede depender de que la prioridad esté vacía —eso apagaría la tarjeta
+     en cuanto él la contesta y su propia respuesta se caería—, y por eso mismo
+     lo que decide si su respuesta vale es esto y no otra cosa.
+     El ORDEN no se decide aquí: la tarjeta va detrás de las tres aprobadas por
+     su sitio en la lista, y lo que viene después la espera con `trasOrden`. */
+  function canSayPriority() {
+    return tareasElegidas().length > 1;
+  }
+  function tocaLaPrioridad() {
+    return canSayPriority();
+  }
+  function respuestaPrioridad() {
+    if (!canSayPriority() || !prioridadVigente()) return null;
+    return { id: "tareaPrioridadResumen", corto: M_CORTO_PRIORIDAD,
+             tipo: "single", valores: [prioridadVigente()], otra: "", noSe: false };
+  }
+  /* La que abre la demostración, con nombre y apellidos: la que eligió él, o la
+     única que marcó (entonces no hubo nada que elegir). */
+  function prioridadElegida() {
+    var r = respuestaPrioridad();
+    if (r) return r.valores[0];
+    var elegidas = tareasElegidas();
+    return elegidas.length === 1 ? elegidas[0] : valorTarea();
+  }
+
   function construirMensaje() {
     var lineas = [];
 
@@ -2263,8 +2545,22 @@ var CONFIG = {
     lineas.push("Respuestas de Pedro · " + fechaHoy());
     lineas.push("");
 
-    /* 2 · Todas las respuestas nuevas, tal cual, sin interpretar. */
+    /* 2 · Todas las respuestas nuevas, tal cual, sin interpretar. La primera
+          línea lleva TODAS las tareas que ha marcado, sin dejar ninguna fuera;
+          y justo detrás va la prioridad, como una respuesta suya más.
+          La prioridad viaja UNA sola vez: se saca de donde esté y se coloca
+          justo detrás de las tareas. Y nada se inventa: si su respuesta no está
+          entre las que va a mandar, aquí no se añade. */
     var nuevas = respuestasNuevas();
+    var sitioTarea = -1, sitioPrioridad = -1;
+    for (var k = 0; k < nuevas.length; k++) {
+      if (nuevas[k].id === "tarea") sitioTarea = k;
+      if (nuevas[k].id === "tareaPrioridad") sitioPrioridad = k;
+    }
+    if (sitioTarea >= 0 && sitioPrioridad >= 0 && sitioPrioridad !== sitioTarea + 1) {
+      var laSuya = nuevas.splice(sitioPrioridad, 1)[0];
+      nuevas.splice(sitioTarea + 1, 0, laSuya);
+    }
     lineas.push("== RESPUESTAS NUEVAS ==");
     if (nuevas.length) {
       nuevas.forEach(function (p) {
@@ -2378,19 +2674,52 @@ var CONFIG = {
   btnSiReiniciar.addEventListener("click", empezarDeNuevo);
   btnNoReiniciar.addEventListener("click", cancelarReinicio);
 
+  /* --- Una visita empezada con la versión anterior ---
+     Antes la primera pregunta era de UNA tarea y no existía la prioridad. Lo
+     guardado se lee tal cual y se pone al día: sus tareas son las que marcó (una
+     o varias, porque el guardado puede venir de cualquiera de las dos formas),
+     y la que iba primero es exactamente esa. Así no se le pierde nada ni se le
+     inventa una prioridad que no eligió. */
+  function ponerAlDiaLoGuardado() {
+    var r = estado.respuestas.tarea;
+    if (!r) return;
+    if (typeof r.valores === "string") r.valores = [r.valores];
+    if (!r.valores) r.valores = [];
+    /* La prioridad se deduce solo si el guardado no traía ninguna: con una sola
+       tarea marcada esa es la prioridad, y con varias se le vuelve a preguntar
+       (nunca se elige por él). */
+    if (!estado.respuestas.tareaPrioridad) {
+      var elegidas = tareasElegidas();
+      if (elegidas.length === 1) {
+        estado.respuestas.tareaPrioridad = { valores: [elegidas[0]], otra: "", noSe: false };
+      }
+    }
+  }
+
   function recuperar() {
     var raw;
     try { raw = window.localStorage.getItem(STORAGE_KEY); } catch (e) { return false; }
     if (!raw) return false;
     var data;
     try { data = JSON.parse(raw); } catch (e) { return false; }
-    if (!data || data.v !== STORAGE_VERSION || !data.respuestas) return false;
+    if (!data || !data.respuestas) return false;
+    /* Solo se retoma lo de esta versión y lo de las anteriores (v1: la primera
+       pregunta era de una sola tarea y no había prioridad; y lo guardado sin
+       número de versión, que es de antes de que se guardara). Lo de versiones
+       desconocidas no se convierte a ciegas: mejor empezar de cero que ponerle
+       en la boca algo que no dijo. */
+    var versionGuardada = typeof data.v === "number" ? data.v : 1;
+    if (versionGuardada !== STORAGE_VERSION && versionGuardada !== 1) return false;
 
     estado.respuestas = data.respuestas;
     estado.confirmacion = data.confirmacion || "";
     estado.conclusion = data.conclusion || "";
     estado.exitoConfirmado = !!data.exitoConfirmado;
     estado.preguntadas = data.preguntadas || [];
+    /* Una visita empezada con la versión anterior se pone al día antes de
+       depurar nada: sus tareas se leen como son y la prioridad se deduce solo
+       cuando no hay ninguna duda. */
+    ponerAlDiaLoGuardado();
     /* El recorrido, con los nombres de ahora (`pantallas`/`pantalla`) y también
        con los de antes (`ruta`/`paso`, `revision`, `terminado`, `volviendo`), para
        no perderle el sitio a una visita empezada con una versión anterior. */
@@ -2469,7 +2798,12 @@ var CONFIG = {
 
   /* En las preguntas de varias respuestas, «Aún no lo sé» y «Otra opción» no
      conviven con las demás: marcar una suelta las otras, y al revés. Así el
-     dato que me llega nunca se contradice a sí mismo. */
+     dato que me llega nunca se contradice a sí mismo.
+     Con UNA excepción, en la primera pregunta: ahí «Otra opción» es una tarea
+     más de la lista —la que él escribe—, así que SÍ convive con las tareas
+     marcadas. Si al marcarla se llevara por delante las que ya había elegido,
+     Pedro perdería su propia selección por añadir una tarea suya. «Aún no lo
+     sé» sigue siendo excluyente siempre: eso no es una tarea, es no saberla. */
   function sincronizarExclusividad(target) {
     if (!target || !target.name) return;
     var grupo = Array.prototype.slice.call(form.querySelectorAll('input[name="' + target.name + '"]'));
@@ -2478,11 +2812,16 @@ var CONFIG = {
     var esSuave = target.hasAttribute("data-exclusive-soft");
     var esOtra = target.hasAttribute("data-other");
     var esNormal = !esSuave && !esOtra;
+    /* La primera pregunta es la única donde una tarea escrita convive con las
+       de la lista. */
+    var otraConvive = target.name === "tarea";
 
     grupo.forEach(function (input) {
       if (input === target || !input.checked) return;
       var suave = input.hasAttribute("data-exclusive-soft");
       var otra = input.hasAttribute("data-other");
+      if (otraConvive && esOtra && !suave && !otra) return;   /* se queda marcada */
+      if (otraConvive && esNormal && otra) return;            /* y al revés, también */
       if ((esSuave || esOtra) && !suave && !otra) input.checked = false;
       else if (esNormal && (suave || otra)) input.checked = false;
       else if (esSuave && otra) input.checked = false;
@@ -2810,9 +3149,17 @@ var CONFIG = {
     /* Costura de diagnóstico: deja ver por qué el motor deduce o no. No se pinta
        en pantalla ni expone nada que no esté ya en la propia página. */
     diagnostico: function () {
+      var vistas = {};
+      var cortos = {};
+      PREGUNTAS.forEach(function (p) {
+        if (p._opcionesVistas) vistas[p.id] = p._opcionesVistas.slice();
+        cortos[p.id] = p.corto;
+      });
       return {
         respondidas: preguntasRespondidas().map(function (p) { return p.id; }),
         aplicables: preguntasAplicables().map(function (p) { return p.id; }),
+        vistas: vistas,
+        cortos: cortos,
         version: STORAGE_VERSION
       };
     },
@@ -2856,7 +3203,21 @@ var CONFIG = {
                revision: enRevision(), atras: hayAtras(), delante: hayDelante() };
     },
     opcionesDe: function (id) { var p = porId(id); return p ? valoresDeOpciones(p) : []; },
-    versionCuestionario: "revision-3"
+    /* Lo que ha elegido en la primera pregunta: todas las tareas, tal cual, y
+       cuál de ellas abre la demostración. Lo usa la prueba para comprobar que
+       no se pierde ninguna y que la prioridad es la que él eligió. */
+    tareas: function () {
+      return { elegidas: tareasElegidas(), prioridad: prioridadElegida(),
+               valor: valorTarea(), reales: tareasReales() };
+    },
+    /* Costura de diagnóstico: qué prioridad viaja y si su respuesta vale. */
+    prioridad: function () {
+      return { vigente: prioridadVigente(), puede: canSayPriority(),
+               toca: tocaLaPrioridad(), respuesta: respuestaPrioridad(),
+               hay: hayPrioridadQueDecir(),
+               guardada: estado.respuestas.tareaPrioridad || null };
+    },
+    versionCuestionario: "revision-4"
   };
 })();
 </script>
